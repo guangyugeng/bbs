@@ -1,0 +1,109 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="set-avatar box">
+    <div class="box-header underline">
+        <a class="my-link" href="/">{{hostname}}</a>
+        <span>&nbsp;>&nbsp; 修改头像</span>
+    </div>
+    <div class="form center">
+        <form action="/api/upload/avatar" method="post" enctype="multipart/form-data">
+            <div class="fix-img">
+                <div class="float-left">
+                    <img id="selected-img" class="selected-img" src="{{ user.avatar }}">
+                </div>
+                <div class="preview float-right">
+                    <div class="img-preview img-big float-left">
+                    </div>
+                    <div class="img-preview img-middle float-left">
+                    </div>
+                    <div class="img-preview img-small float-left">
+                    </div>
+                </div>
+            </div>
+            <div class="action">
+                <input id="data-img-x" type="hidden" name="x" value="">
+                <input id="data-img-y" type="hidden" name="y" value="">
+                <input id="data-img-nw" type="hidden" name="nw" value="">
+                <input id="data-img-nh" type="hidden" name="nh" value="">
+                <input class="file-input" type="file" accept="image/*" name="photo" required>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                <p class="{{ category }}">{{ message }}</p>
+                {% endfor %}
+                {% endwith %}
+                <button class="btn btn-set-avatar" name="button">上传头像</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="set-info box">
+    <div class="box-header underline">
+        <a class="my-link" href="/">{{hostname}}</a>
+        <span>&nbsp;>&nbsp; 设置</span>
+    </div>
+    <div class="form center">
+        <table>
+            <tr>
+                <td>
+                    <span>用户名:</span>
+                </td>
+                <td>
+                    <span>{{user.username}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>电子邮箱:</span>
+                </td>
+                <td>
+                    <input class="email" type="email" required value="{{user.email}}">
+                    <small><p class="email-message message"></p></small>
+                </td>
+            </tr>
+        </table>
+        <button class="btn btn-set-info" name="button">保存修改</button>
+    </div>
+</div>
+<div class="password-change box">
+    <div class="box-header underline">
+        <a class="my-link" href="/">{{hostname}}</a>
+        <span>&nbsp;>&nbsp; 修改密码</span>
+    </div>
+    <div class="form center">
+        <table>
+            <tr>
+                <td>
+                    <span>当前密码:</span>
+                </td>
+                <td>
+                    <input class="old-password" type="password" value="">
+                    <small><p class="old-psw-message message">请输入当前密码</p></small>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>新密码:</span>
+                </td>
+                <td>
+                    <input class="new-password" type="password" value="">
+                    <small><p class="password-message message">输入8-20位密码,只能使用英文字母、下划线及数字</p></small>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>重复新密码:</span>
+                </td>
+                <td>
+                    <input class="confirm-password" type="password" value="">
+                    <small><p class="confirm-message message">重复输入的密码</p></small>
+                </td>
+            </tr>
+        </table>
+        <button class="btn btn-change-password" name="button">修改密码</button>
+    </div>
+</div>
+
+{% endblock %}
