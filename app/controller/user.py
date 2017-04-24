@@ -1,4 +1,4 @@
-from app.models.User import User
+from app.models import User
 from flask_login import login_user
 from functools import wraps
 from utils import log

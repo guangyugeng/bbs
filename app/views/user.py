@@ -1,5 +1,5 @@
 from flask import render_template, flash, session, redirect, url_for,Blueprint,abort,request,g
-from app.models.User import User
+from app.models import User
 from flask_login import login_user, logout_user, current_user, login_required
 from datetime import datetime
 

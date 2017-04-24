@@ -3,7 +3,7 @@ from flask_login import login_user, logout_user, current_user, login_required
 from flask import g, Blueprint
 from datetime import datetime
 from app import db, lm
-from app.models.User import User, ROLE_USER, ROLE_ADMIN
+from app.models import User, ROLE_USER, ROLE_ADMIN
 from app.forms import LoginForm, RegisterForm
 from flask_nav.elements import Navbar, View, Subgroup, Link, Text, Separator
 from flask_bootstrap import __version__ as FLASK_BOOTSTRAP_VERSION

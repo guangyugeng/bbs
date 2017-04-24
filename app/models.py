@@ -27,18 +27,18 @@ class ModelMin(object):
         db.session.delete(self)
         db.session.commit()
 
-    # def hidden(self):
-    #     self.hidden = True
-    #     db.session.commit()
-    #
-    # def _update(self):
-    #     db.session.merge(self)
-    #     db.session.commit()
-    #
-    # @classmethod
-    # def new(cls, form):
-    #     m = cls(form)
-    #     m.save()
+    def hidden(self):
+        self.hidden = True
+        db.session.commit()
+
+    def _update(self):
+        db.session.merge(self)
+        db.session.commit()
+
+    @classmethod
+    def new(cls, form):
+        m = cls(form)
+        m.save()
 
 
 def timestamp():
@@ -46,7 +46,7 @@ def timestamp():
 
 
 class User(db.Model, ModelMin):
-    # __tablename__ = 'user'
+    __tablename__ = 'user'
 
     id = db.Column(db.Integer, primary_key = True)
     username = db.Column(db.String(64), unique = True)
@@ -57,8 +57,8 @@ class User(db.Model, ModelMin):
     # user_info= db.Column(db.String(140))
     last_seen = db.Column(db.DateTime)
 
-    # posts = db.relationship('Post', lazy='dynamic',cascade="delete, delete-orphan", backref='user')
-    # comments = db.relationship('Comment', lazy='dynamic',cascade="delete, delete-orphan", backref='user')
+    posts = db.relationship('Post', lazy='dynamic',cascade="delete, delete-orphan", backref='user')
+    comments = db.relationship('Comment', lazy='dynamic',cascade="delete, delete-orphan", backref='user')
 
     def __init__(self, form):
         # r = self.register_valid(form)
@@ -273,8 +273,8 @@ class Comment(db.Model, ModelMin):
     def __init__(self, form):
         self.created_time = timestamp()
         self.edited_time = timestamp()
-        self.user = g.user
-        self.content = form.get('content', '')
+        self.user_id = form.get('user_id')
+        self.content = form.get('content')
         self.post_id = form.get('post_id')
 
     def json(self):
@@ -306,22 +306,25 @@ class Post(db.Model, ModelMin):
     title = db.Column(db.String(30))
     content = db.Column(db.String(1000))
     hidden = db.Column(db.Boolean, default=False)
+    topic_id = db.Column(db.Integer, db.ForeignKey('topic.id', ondelete='CASCADE'))
     node_id = db.Column(db.Integer, db.ForeignKey('node.id', ondelete='CASCADE'))
     comments = db.relationship('Comment', lazy='dynamic',cascade="delete, delete-orphan", backref='post')
 
     def __init__(self, form):
         self.created_time = timestamp()
         self.edited_time = timestamp()
-        self.user = g.user
+        self.user_id = form.get('user_id', '')
         self.title = form.get('title', '')
         self.content = form.get('content', '')
         self.node_id = form.get('node_id')
+        self.topic_id = form.get('topic_id')
 
     def update(self, form):
         self.edit_time = timestamp()
         self.title = form.get('title')
         self.content = form.get('content')
         self.node_id = form.get('node_id')
+        self.topic_id = form.get('topic_id')
         self._update()
 
     def permission_valid(self, u):

@@ -4,7 +4,7 @@ import unittest
 
 from config import basedir
 from app import app, db
-from app.model import User
+from app.models import User, Topic, Node, Comment, Post
 # from app.models.Topic import Topic
 # from app.models.Node import Node
 # from app.models.Post import Post
@@ -14,7 +14,7 @@ from app.controller.user import register, login
 from utils import log
 
 
-class TestUser(unittest.TestCase):
+class TestModel(unittest.TestCase):
     form1 = {
         'nickname' : 'john',
         'email' : 'john@example.com',
@@ -82,6 +82,7 @@ class TestUser(unittest.TestCase):
 
     def test_register(self):
         assert register(self.form1)['valid'] == True
+        # assert register(self.form1)['valid'] == True
         assert register(self.form2)['valid'] == False
         assert register(self.form3)['valid'] == False
         assert register(self.form4)['valid'] == False
@@ -93,7 +94,7 @@ class TestUser(unittest.TestCase):
         assert login(self.form1)['valid'] == True
         assert login(self.form6)['valid'] == False
 
-    def test_view(self):
+    def test_user_view(self):
         u = User(self.form7)
         u.save()
         # log(self.form7.items() and u.view(u.username).__dict__.items(),'view')
@@ -101,6 +102,78 @@ class TestUser(unittest.TestCase):
         for k, v in self.form7.items():
             if k != 'confirm':
                 assert view_dict[k] == view_dict[k]
+
+    def test_topic(self):
+        topic1 = Topic('Geek')
+        topic2 = Topic('游戏')
+        topic1.save()
+        topic2.save()
+
+    def test_node(self):
+        node_form1 = {'topic_id':1,'name':'程序员', 'description':'While code monkeys are not eating bananas, they\'re coding.'}
+        node_form2 = {'topic_id':1,'name':'python', 'description':' 这里讨论各种 Python 语言编程话题，也包括 Django，Tornado 等框架的讨论。这里是一个能够帮助你解决实际问题的地方。 '}
+        node_form3 = {'topic_id':2,'name':'英雄联盟', 'description': 'League of Legends (LoL) is a multiplayer online battle arena video game. '}
+        node_form4 = {'topic_id':2,'name':'Steam', 'description':' Delivers a range of games straight to a computer\'s desktop. '}
+        # topic1 = Topic('Geek')
+        # topic2 = Topic('游戏')
+        # topic1.save()
+        # topic2.save()
+        node1_1 = Node(node_form1)
+        node1_2 = Node(node_form2)
+        node2_1 = Node(node_form3)
+        node2_2 = Node(node_form4)
+        node1_1.save()
+        node1_2.save()
+        node2_1.save()
+        node2_2.save()
+        nodes1 = Node.query.filter_by(topic_id=1).all()
+        nodes2 = Node.query.filter_by(topic_id=2).all()
+        for n1 in nodes1:
+            assert n1.id == node1_1.id or n1.id == node1_2.id
+        for n2 in nodes2:
+            assert n2.id == node2_1.id or n2.id == node2_2.id
+
+    def test_post(self):
+        post_form1 = {'user_id':1,
+                      'title':'test title',
+                      'content':'test content',
+                      'node_id':1,
+                      'topic_id':1}
+        post_form2 = {'user_id':2,
+                      'title':'test title',
+                      'content':'test content',
+                      'node_id':2,
+                      'topic_id':2}
+        post_update_form1 = {'title':'test1 title',
+                      'content':'test1 content',
+                      'node_id':1,
+                      'topic_id':1}
+        post_update_form2 = {'title':'test2 title',
+                      'content':'test2 content',
+                      'node_id':2,
+                      'topic_id':2}
+        post1 = Post(post_form1)
+        post1.save()
+        post2 = Post(post_form2)
+        post2.save()
+        post1.update(post_update_form1)
+        post2.update(post_update_form2)
+        assert post1.title == 'test1 title'
+
+    def test_comment(self):
+        comment_form1 = {'user_id':1,
+                         'post_id':1,
+                         'content':'test1 comment'}
+        comment_form2 = {'user_id':2,
+                         'post_id':2,
+                         'content':'test2 comment'}
+        comment1 = Comment(comment_form1)
+        comment2 = Comment(comment_form2)
+        assert comment1.content == 'test1 comment'
+        assert comment2.content == 'test2 comment'
+
+        # log(post1.title)
+
         # assert self.form7.items() and u.view(u.username).__dict__.items() == self.form7.items()
         # create a user and write it to the database
         # u = User(self.form1)
