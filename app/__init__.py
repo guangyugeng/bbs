@@ -29,11 +29,11 @@ lm.init_app(app)
 # to register it:
 # app.register_blueprint(frontend)
 from app.views.general import main as general
-# from app.views.api import main as api
+from app.views.api import main as api
 from app.views.user import main as user
 
 app.register_blueprint(general)
-# app.register_blueprint(api)
+app.register_blueprint(api, url_prefix='/api')
 app.register_blueprint(user)
 # Because we're security-conscious developers, we also hard-code disabling
 # the CDN support (this might become a default in later versions):

@@ -23,7 +23,7 @@ main = Blueprint('general', __name__)
 @main.route('/')
 @main.route('/index', methods = ['GET', 'POST'])
 def index():
-    print(g.user,'sdsds')
+    # print(g.user,'sdsds')
     user = g.user
     if user.is_authenticated:
         return render_template('general/index.html',
@@ -38,7 +38,7 @@ def load_user(id):
     return User.query.get(int(id))
 
 
-@main.route('/login_register', methods = ['GET', 'POST'])
+@main.route('/login_register', methods = ['GET'])
 def login_register():
     # login_form = LoginForm()
     # register_form = RegisterForm()

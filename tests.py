@@ -19,55 +19,45 @@ class TestModel(unittest.TestCase):
         'nickname' : 'john',
         'email' : 'john@example.com',
         'username' : 'mynameisvalid1',
-        'password' : 'mypasswordvalid1',
-        'confirm' : 'mypasswordvalid1'
+        'password' : 'mypasswordvalid1'
     }
     form2 = {
         'nickname' : 'susan',
         'email' : 'susan@example.com',
         'username' : 'no',
-        'password' : 'mypasswordvalid',
-        'confirm' : 'mypasswordvalid'
-    }
-    form3 = {
-        'nickname' : 'mary',
-        'email' : 'mary@example.com',
-        'username' : 'mynameisvalid4',
-        'password' : 'no',
-        'confirm' : 'mypasswordvalid'
+        'password' : 'mypasswordvalid'
     }
     form4 = {
         'nickname' : 'david',
         'email' : 'e4@example.com',
         'username' : 'mynameisvalid4',
-        'password' : 'no',
-        'confirm' : 'no'
+        'password' : 'no'
     }
     form5 = {
-        'nickname' : 'nn5',
-        'email' : 'e5@example.com',
-        'username' : 'mynameisvalid4',
-        'password' : 'mypasswordvalid',
-        'confirm' : 'no'
+        'nickname' : '小明',
+        'email' : '772815697@qq.com',
+        'username' : 'guangyugeng',
+        'password' : '123456'
     }
     form6 = {
         'nickname' : '6',
         'email' : 'e6@example.com',
         'username' : 'mynameisvalid4',
-        'password' : 'mypasswordvalid',
-        'confirm' : 'mypasswordvalid'
+        'password' : 'mypasswordvalid'
     }
     form7 = {
         'nickname' : 'nick7',
         'email' : 'nick7@example.com',
         'username' : 'mynameisvalid7',
-        'password' : 'mypasswordvalid1',
-        'confirm' : 'mypasswordvalid1'
+        'password' : 'mypasswordvalid1'
     }
     def setUp(self):
+        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+        app.secret_key = 'secret key'
         app.config['TESTING'] = True
         app.config['CSRF_ENABLED'] = False
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'test.db')
+        # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:123456@localhost/bbs'
         db.create_all()
 
     def tearDown(self):
@@ -84,14 +74,15 @@ class TestModel(unittest.TestCase):
         assert register(self.form1)['valid'] == True
         # assert register(self.form1)['valid'] == True
         assert register(self.form2)['valid'] == False
-        assert register(self.form3)['valid'] == False
         assert register(self.form4)['valid'] == False
-        assert register(self.form5)['valid'] == False
+        assert register(self.form5)['valid'] == True
         assert register(self.form6)['valid'] == False
 
     def test_login(self):
         assert register(self.form1)['valid'] == True
+        assert register(self.form5)['valid'] == True
         assert login(self.form1)['valid'] == True
+        assert login(self.form5)['valid'] == True
         assert login(self.form6)['valid'] == False
 
     def test_user_view(self):

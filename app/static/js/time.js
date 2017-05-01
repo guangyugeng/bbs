@@ -1,3 +1,7 @@
+var log = function() {
+  console.log(arguments)
+}
+
 
 var formatTime = function(current_time, old_time){
         var timestamp = current_time - old_time
@@ -27,6 +31,8 @@ var formatTime = function(current_time, old_time){
     }
 
 var bindEventResetTime = function(){
+    log("reset")
+
     var current_time = $('div.timestamp').first().text()
     var usr_reg_time = $('time.usr-reg-time').first()
     var reg_time = parseInt(usr_reg_time.text())
@@ -39,13 +45,14 @@ var bindEventResetTime = function(){
 }
 
 
-var bindEvents = function() {
+var bindTimeEvents = function() {
+    log('bindEventResetTime')
     bindEventResetTime()
 }
 
 
 $(document).ready(function(){
-
-    bindEvents()
+    log("????")
+    bindTimeEvents()
 
 })

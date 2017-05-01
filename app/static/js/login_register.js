@@ -3,8 +3,10 @@ var log = function() {
 }
 
 
+
+
 var bindEventLoginToggle = function(){
-    log("login")
+    log("login toggle")
     $(".check-box").on("click", "ul.nav-tabs li" ,function(event) {
         log('Toggle')
         $("ul.nav-tabs li").removeClass("active");
@@ -20,27 +22,29 @@ var bindEventLoginToggle = function(){
 
 
 var bindEventLogin = function(event){
-    $("#submit-login").on("click" ,function(event) {
+    $("#login-form").submit(function(event) {
 
-        var box = $(event.target).closest('#login-box')
-        var username = $(box).find('.username').first().val()
-        var password = $(box).find('.password').first().val()
+        var view = $(event.target).closest('#login-box')
+        var username = $(view).find('.username').first().val()
+        var password = $(view).find('.password').first().val()
         var form = {
             'username': username,
             'password': password
         }
+        log(username,password)
+
         var response = function(r){
-            if (r.success){
+            log(r,r.valid,r.msg)
+            if (r.valid){
                 window.location.href = document.referrer
             }
             else{
-                var message = r.message
+                var message = r.msg
                 for (var k in message){
-                    var p_message = $(box).find(k).first()
+                    var p_message = $(view).find(k).first()
                     p_message.text(message[k])
                     p_message.addClass('error')
                 }
-
             }
         }
         api.login(form, response)
@@ -49,26 +53,31 @@ var bindEventLogin = function(event){
 
 
 var bindEventRegister = function(event){
-    $("#submit-register").on("click" ,function(event) {
+    $("#register-form").submit(function(event) {
 
     var view = $(event.target).closest('#register-box')
     var username = $(view).find('.username').first().val()
+    var nickname = $(view).find('.nickname').first().val()
     var password = $(view).find('.password').first().val()
-    var confirm = $(view).find('.confirm-password').first().val()
     var email = $(view).find('.email').first().val()
 
     var form = {
         'username': username,
+        'nickname': nickname,
         'password': password,
-        'confirm': confirm,
         'email': email
     }
+    log(form.email,email,username,password,nickname)
     var response = function(r){
-        if (r.success){
+        log(r,r.valid,r.msg)
+        if (r.valid){
+            alert("success")
             window.location.href = document.referrer
         }
         else{
-            var message = r.message
+            alert("fail")
+            var message = r.msg
+            log(message)
             for (var k in message){
                 var p_message = $(view).find(k).first()
                 p_message.text(message[k])
@@ -110,16 +119,16 @@ var bindEventRegisterValid = function(){
 
 
 
-var bindEvents = function() {
+var bindLoginRegisterEvents = function() {
+    log("bindEventLoginToggle")
     bindEventLoginToggle()
     bindEventRegister()
     bindEventLogin()
-    bindEventRegisterValid()
 }
 
 
 $(document).ready(function(){
-    log('begin`')
-    bindEvents()
+    log('L_R')
+    bindLoginRegisterEvents()
 
 })

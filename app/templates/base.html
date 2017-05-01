@@ -8,9 +8,14 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>{% block title %} {% endblock %} > {{hostname}}</title>
         <script src="../static/vendor/jquery/jquery.min.js"></script>
+        <script>
+          $(function () { $("input,select,textarea").not("[type=submit]").jqBootstrapValidation(); } );
+        </script>
         <script src="/static/js/api/base.js"></script>
         <script src="/static/js/time.js"></script>
         <script src="/static/js/bootstrap.min.js"></script>
+        <script src="/static/js/jqBootstrapValidation.js"></script>
+
         {% block script %}
         {% endblock %}
         <!-- CSS -->
@@ -21,7 +26,7 @@
         <!--<link rel="stylesheet" href="//cdn.jsdelivr.net/alertifyjs/1.8.0/css/themes/semantic.min.css"/>-->
         <!--&lt;!&ndash; Bootstrap theme &ndash;&gt;-->
         <link href="../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="/static/css/base.css">
+        <link href="/static/css/base.css" rel="stylesheet">
 
         {% block css %}
         {% endblock %}
@@ -51,7 +56,7 @@
         <button type="submit" class="btn btn-default">搜索</button>
       </form>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">首页</a></li>
+        <li><a href="{{url_for('general.index')}}">首页</a></li>
 
           {% if user %}
           <li class="dropdown">

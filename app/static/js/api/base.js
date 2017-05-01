@@ -8,12 +8,13 @@ api._ajax = function(url, method, data, contentType, callback){
         data: data,
         headers: {'X-CSRFToken': csrfToken},
         success: function(response){
-            callback(response)
+            var r = JSON.parse(response)
+            callback(r)
         },
         error: function(err){
             var r = {
-                'success': false,
-                'message': {'.message':'网络错误'}
+                'valid': false,
+                'msg': {'.message':'网络错误'}
             }
             callback(r)
         }
@@ -33,6 +34,7 @@ api.post = function(url, data, callback){
 api.get = function(url, data, callback){
     api.ajax(url, 'get', data, callback)
 }
+
 
 
 //var base_url = 'http://kaede.cc'

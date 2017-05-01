@@ -28,10 +28,10 @@ main = Blueprint('user', __name__)
 #                            )
 
 @main.route('/<string:username>/info')
-# @login_required
+@login_required
 def info(username):
     data = User.view(username)
-    return render_template('user.info.html', **data)
+    return render_template('user.info.html', data)
 
 
 @main.route('/<string:username>/setting')

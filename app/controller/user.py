@@ -10,11 +10,12 @@ def login_valid(function):
         form = args[0]
         username = form.get('username')
         password = form.get('password')
+        log(username)
         u = User.query.filter_by(username=username).first()
+        log('valid',u)
         valid = u is not None and u.password == password
         r = dict(
             valid=valid,
-            user=u,
             msg=dict()
         )
         msg = r['msg']
@@ -36,7 +37,7 @@ def register_valid(function):
         email = form.get('email')
         un_valid_msg = username_valid(username)
         nn_valid_msg = nickname_valid(nickname)
-        pw_valid_msg = password_valid(password, confirm_password)
+        pw_valid_msg = password_valid(password)
         e_valid_msg = email_valid(email)
         un_valid = un_valid_msg['valid']
         nn_valid = nn_valid_msg['valid']
@@ -62,15 +63,17 @@ def login(form, r=dict):
     # u = User(form)
     if r['valid']:
         db_u = User.query.filter_by(username=form['username']).first()
+        log('login success')
         # login_user(db_u)
-
     return r
 
 
 @register_valid
 def register(form, r=dict):
+    log('register',r['valid'],r['msg'])
     if r['valid']:
         u = User(form)
+        log('register')
         u.save()
     return r
 
@@ -127,7 +130,7 @@ def nickname_valid(nickname):
     return result
 
 
-def password_valid(password, confirm_password):
+def password_valid(password):
     result = dict(
         valid=False,
         msg=dict()
@@ -137,17 +140,17 @@ def password_valid(password, confirm_password):
     # for c in password:
     #     if c not in valid_str:
     #         str_valid = False
-    confirm_password = confirm_password.strip()
-    length_valid = 8 <= len(password) <= 20
-    confirm_valid = password == confirm_password
-    result['valid'] = str_valid and length_valid and confirm_valid
+    # confirm_password = confirm_password.strip()
+    length_valid = 6 <= len(password) <= 20
+    # confirm_valid = password == confirm_password
+    result['valid'] = str_valid and length_valid
     msg = result['msg']
     if not str_valid:
-        msg['.password-message'] = '输入8-20位密码,只能使用英文字母、下划线及数字'
+        msg['.password-message'] = '输入6-20位密码,只能使用英文字母、下划线及数字'
     if not length_valid:
-        msg['.password-message'] = '输入8-20位密码,只能使用英文字母、下划线及数字'
-    if not confirm_valid:
-        msg['.confirm-message'] = '重复输入的密码'
+        msg['.password-message'] = '输入6-20位密码,只能使用英文字母、下划线及数字'
+    # if not confirm_valid:
+    #     msg['.confirm-message'] = '重复输入的密码'
     return result
 
 
@@ -183,71 +186,6 @@ def email_valid(email):
         msg['.email-message'] = '邮箱已被注册'
     return result
 
-#
-# def register_valid(cls, form, message):
-#     username = form.get('username')
-#     password = form.get('password')
-#     confirm_password = form.get('confirm')
-#     email = form.get('email')
-#     username_valid = cls.username_valid(username, message)
-#     password_valid = cls.password_valid(password, confirm_password, message)
-#     email_valid = cls.email_valid(email, message)
-#     success = username_valid and email_valid and password_valid
-#     return success
-#
-#
-# def username_valid(cls, username, message):
-#     username = username.strip()
-#     for c in username:
-#         if c not in valid_str:
-#             message['.username-message'] = '输入8-20位用户名,只能使用英文字母、下划线及数字'
-#             return False
-#     length_valid = 8 <= len(username) <= 20
-#     u = User.query.filter_by(username=username).first()
-#     not_exist = u is None
-#     if not length_valid:
-#         message['.username-message'] = '输入8-20位用户名,只能使用英文字母、下划线及数字'
-#     elif not not_exist:
-#         message['.username-message'] = '用户名已存在'
-#     return length_valid and not_exist
-#
-#
-# def password_valid(cls, password, confirm_password, message):
-#     password = password.strip()
-#     for c in password:
-#         if c not in valid_str:
-#             message['.password-message'] = '输入8-20位密码,只能使用英文字母、下划线及数字'
-#             return False
-#     confirm_password = confirm_password.strip()
-#     length_valid = 8 <= len(password) <= 20
-#     confirm_valid = password == confirm_password
-#     if not length_valid:
-#         message['.password-message'] = '输入8-20位密码,只能使用英文字母、下划线及数字'
-#     if not confirm_valid:
-#         message['.confirm-message'] = '重复输入的密码'
-#     return length_valid and confirm_valid
-#
-#
-# def email_valid(cls, email, message):
-#     email = email.strip()
-#     for c in email:
-#         if c not in email_valid_str:
-#             message['.email-message'] = '请输入正确的邮箱'
-#             return False
-#     split_email = email.split('@', 1)
-#     split_valid = len(split_email) == 2
-#     if split_valid and split_email[0] != '' and split_email[1] != '':
-#         host = split_email[1]
-#         split_host = host.split('.', 1)
-#         split_valid = len(split_host) == 2
-#         if split_valid and split_host[0] != '' and split_host[1] != '':
-#             u = cls.query.filter_by(email=email).first()
-#             if u is None:
-#                 return True
-#             message['.email-message'] = '邮箱已被注册'
-#     else:
-#         message['.email-message'] = '请输入正确的邮箱'
-#     return False
 
 def setting_valid(self, form, message):
     email = form.get('email')

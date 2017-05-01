@@ -22,34 +22,58 @@
             <div id="register-box" class="login-register-item col-lg-8 col-lg-offset-2 hide">
                 <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19. -->
                 <!-- The form should work on most web servers, but if the form is not working you may need to configure your web server differently. -->
+                <form id="register-form">
 
                     <div class="row control-group">
                         <div class="form-group col-xs-12 floating-label-form-group controls">
                             <label for="username">用户名</label>
-                            <input type="text" class="form-control username" placeholder="用户名" required data-validation-required-message="请输入用户名.">
-
+                            <input type="text" class="form-control username" placeholder="用户名" minlength="3" maxlength="20" required="required" data-validation-required-message="请输入用户名.">
+                            <small><p class="text-center message username-message">
+                            </p></small>
                             <p class="help-block text-danger help-username"></p>
                         </div>
                     </div>
                     <div class="row control-group">
                         <div class="form-group col-xs-12 floating-label-form-group controls">
                             <label for="nickname">昵称</label>
-                            <input type="text" class="form-control nickname" placeholder="昵称" required data-validation-required-message="请输入昵称.">
+                            <input type="text" class="form-control nickname" placeholder="昵称" minlength="2" maxlength="20" required="required" data-validation-required-message="请输入昵称.">
+                            <small><p class="text-center message nickname-message">
 
+                            </p></small>
                             <p class="help-block text-danger"></p>
                         </div>
                     </div>
                     <div class="row control-group">
                         <div class="form-group col-xs-12 floating-label-form-group controls">
                             <label for="email">邮箱地址</label>
-                            <input type="email" class="form-control email" placeholder="邮箱地址" required data-validation-required-message="请输入邮箱地址.">
+                            <input type="email" class="form-control email" name="Email" placeholder="邮箱地址" minlength="6" maxlength="30" required="required" data-validation-required-message="请输入邮箱地址." />
+                            <small><p class="text-center message email-message">
+
+                            </p></small>
+                            <p class="help-block text-danger"></p>
+                        </div>
+                    </div>
+                     <div class="row control-group">
+                        <div class="form-group col-xs-12 floating-label-form-group controls">
+                            <label for="email">确认邮箱地址</label>
+                            <input type="email" class="form-control" placeholder="邮箱地址" required="required" data-validation-matches-match="Email" data-validation-required-message="请输入邮箱地址." />
                             <p class="help-block text-danger"></p>
                         </div>
                     </div>
                     <div class="row control-group">
                         <div class="form-group col-xs-12 floating-label-form-group controls">
-                            <label for="phone">密码</label>
-                            <input type="text" class="form-control password" placeholder="密码" required data-validation-required-message="请输入密码.">
+                            <label for="password">密码</label>
+                            <input type="password" name="register-password" class="form-control password" placeholder="密码" minlength="3" maxlength="20" required="required" data-validation-required-message="请输入密码.">
+                            <small><p class="text-center message password-message">
+                            </p></small>
+
+                            <p class="help-block text-danger"></p>
+                        </div>
+                    </div>
+                    <div class="row control-group">
+                        <div class="form-group col-xs-12 floating-label-form-group controls">
+                            <label for="password">确认密码</label>
+                            <input type="password" class="form-control password" placeholder="确认密码" required="required" data-validation-matches-match="register-password" data-validation-required-message="请再次输入密码.">
 
                             <p class="help-block text-danger"></p>
                         </div>
@@ -61,29 +85,35 @@
                         </div>
 
                     </div>
+                </form>
+
             </div>
+
             <div id="login-box" class="login-register-item col-lg-8 col-lg-offset-2">
                 <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19. -->
                 <!-- The form should work on most web servers, but if the form is not working you may need to configure your web server differently. -->
-                <form name="sentMessage" id="registerForm" novalidate>
+                <form id="login-form">
 
                     <div class="row control-group">
                         <div class="form-group col-xs-12 floating-label-form-group controls">
                             <label for="username">用户名</label>
-                            <input type="text" class="form-control" placeholder="用户名" id="username" required data-validation-required-message="请输入用户名.">
+                            <input type="text" class="form-control username" placeholder="用户名" required="required" data-validation-required-message="请输入用户名.">
                             <p class="help-block text-danger"></p>
                         </div>
                     </div>
-
                     <div class="row control-group">
                         <div class="form-group col-xs-12 floating-label-form-group controls">
                             <label for="password">密码</label>
-                            <input type="text" class="form-control" placeholder="密码" id="password" required data-validation-required-message="请输入密码.">
+                            <input type="text" class="form-control password" placeholder="密码" required="required" data-validation-required-message="请输入密码.">
                             <p class="help-block text-danger"></p>
                         </div>
                     </div>
                     <br>
-                    <div id="success"></div>
+                    <div class="row div-message ">
+                        <small><p class="text-center login-message message">
+                        </p></small>
+
+                    </div>
                     <div class="row">
                         <div class="form-group col-xs-12">
                             <button id="submit-login" type="submit" class="btn btn-success btn-lg">Send</button>
@@ -91,79 +121,6 @@
 
                     </div>
                 </form>
-            </div>
-        </div>
-    </div>
-    <div class="container">
-        <div class="div-view-change unselectable">
-            <div class="check-box center">
-                <div class="check-item inline-block" data-selected=".login-view">
-                    登录
-                </div>
-                <div class="check-item inline-block" data-selected=".register-view">
-                    注册
-                </div>
-            </div>
-            <div class="line-box">
-                <div class="bottom-line login-selected"></div>
-            </div>
-        </div>
-        <div class="box login-view view-item">
-
-            <div class="input-box">
-                <span>用&#12288;户&#12288;名:</span>
-                <input class="username" type="text" placeholder="请输入用户名">
-            </div>
-            <div class="input-box">
-                <span>密&#12288;&#12288;&#12288;码:</span>
-                <input class="password" type="password" placeholder="请输入密码">
-            </div>
-            <div class="div-message ">
-                <small><p class="text-center login-message message">
-                </p></small>
-
-            </div>
-            <div class="submit-box">
-                <button class="btn btn-login" type="button" name="button">提交</button>
-            </div>
-        </div>
-        <div class="box register-view view-item hidden">
-            <div class="input-box">
-                <span>用&#12288;户&nbsp;&nbsp;&nbsp;名:</span>
-                <input class="username" type="text" placeholder="请输入用户名">
-                <small><p class="text-center message username-message">
-                    输入8-20位用户名,只能使用英文字母、下划线及数字
-                </p></small>
-
-            </div>
-            <div class="input-box">
-                <span>密&#12288;&#12288;&nbsp;&nbsp;&nbsp;码:</span>
-                <input class="password" type="password" placeholder="请输入密码">
-                <small><p class="text-center message password-message">
-                    输入8-20位密码,只能使用英文字母、下划线及数字
-                </p></small>
-
-            </div>
-            <div class="input-box">
-                <span>重&nbsp;复&nbsp;密&nbsp;码:</span>
-                <input class="confirm-password" type="password" placeholder="请输入密码">
-                <small><p class="text-center message confirm-message">
-                    重复输入的密码
-                </p></small>
-
-            </div>
-            <div class="input-box">
-                <span>邮&#12288;&#12288;&nbsp;&nbsp;&nbsp;箱:</span>
-                <input class="email" type="email" placeholder="请输入邮箱">
-                <small>
-                    <p class="text-center message email-message">
-                        输入邮箱
-                    </p>
-                </small>
-
-            </div>
-            <div class="submit-box">
-                <button class="btn btn-register" type="button" name="button">提交</button>
             </div>
         </div>
     </div>
