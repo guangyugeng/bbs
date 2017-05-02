@@ -20,16 +20,14 @@ main = Blueprint('general', __name__)
 #         return redirect(url_for('general.index'))
 #     return render_template('login.html')
 
-@main.route('/')
-@main.route('/index', methods = ['GET', 'POST'])
+@main.route('/', methods = ['GET'])
 def index():
     # print(g.user,'sdsds')
-    user = g.user
-    if user.is_authenticated:
+    u = g.user
+    if u.is_authenticated:
         return render_template('general/index.html',
-                               user = user)
+                               user = u)
     else:
-
         return render_template('general/index.html')
 
 
@@ -56,7 +54,7 @@ def login_register():
 @main.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('general.login_view'))
+    return redirect(url_for('general.index'))
 
 
 @main.errorhandler(404)

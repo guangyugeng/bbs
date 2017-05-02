@@ -60,11 +60,10 @@ def register_valid(function):
 
 @login_valid
 def login(form, r=dict):
-    # u = User(form)
     if r['valid']:
         db_u = User.query.filter_by(username=form['username']).first()
         log('login success')
-        # login_user(db_u)
+        login_user(db_u)
     return r
 
 

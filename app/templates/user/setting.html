@@ -56,6 +56,15 @@
             </tr>
             <tr>
                 <td>
+                    <span>昵称:</span>
+                </td>
+                <td>
+                    <input class="nickname" type="text" required value="{{user.nickname}}">
+                    <small><p class="nickname-message message"></p></small>
+                </td>
+            </tr>
+            <tr>
+                <td>
                     <span>电子邮箱:</span>
                 </td>
                 <td>
@@ -79,6 +88,7 @@
                     <span>当前密码:</span>
                 </td>
                 <td>
+
                     <input class="old-password" type="password" value="">
                     <small><p class="old-psw-message message">请输入当前密码</p></small>
                 </td>
@@ -88,6 +98,7 @@
                     <span>新密码:</span>
                 </td>
                 <td>
+                    <input name="new-password" class="form-control new-password" type="password" placeholder="密码" minlength="3" maxlength="20" required="required" data-validation-required-message="请输入密码.">
                     <input class="new-password" type="password" value="">
                     <small><p class="password-message message">输入8-20位密码,只能使用英文字母、下划线及数字</p></small>
                 </td>

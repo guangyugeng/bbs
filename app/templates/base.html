@@ -7,7 +7,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>{% block title %} {% endblock %} > {{hostname}}</title>
-        <script src="../static/vendor/jquery/jquery.min.js"></script>
+
+        {% block script %}
+        <script src="/static/vendor/jquery/jquery.min.js"></script>
         <script>
           $(function () { $("input,select,textarea").not("[type=submit]").jqBootstrapValidation(); } );
         </script>
@@ -15,8 +17,6 @@
         <script src="/static/js/time.js"></script>
         <script src="/static/js/bootstrap.min.js"></script>
         <script src="/static/js/jqBootstrapValidation.js"></script>
-
-        {% block script %}
         {% endblock %}
         <!-- CSS -->
             <!--<link rel="stylesheet" href="//cdn.jsdelivr.net/alertifyjs/1.8.0/css/alertify.min.css"/>-->
@@ -25,11 +25,10 @@
         <!--&lt;!&ndash; Semantic UI theme &ndash;&gt;-->
         <!--<link rel="stylesheet" href="//cdn.jsdelivr.net/alertifyjs/1.8.0/css/themes/semantic.min.css"/>-->
         <!--&lt;!&ndash; Bootstrap theme &ndash;&gt;-->
-        <link href="../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <link href="/static/css/base.css" rel="stylesheet">
 
         {% block css %}
-        {% endblock %}
+        <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+       {% endblock %}
     </head>
     <body>
         <div class="header fixed">
@@ -59,15 +58,25 @@
         <li><a href="{{url_for('general.index')}}">首页</a></li>
 
           {% if user %}
+
           <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-              <ul class="个人中心">
-                  <li><a href="{{url_for('user.info')}}">个人信息</a></li>
+
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">个人中心 <span class="caret"></span></a>
+
+              <ul class="dropdown-menu">
+
+                  <li><a href="{{url_for('user.info', username=user.username)}}">个人信息</a></li>
+
                   <li><a href="{{url_for('user.setting')}}">设置</a></li>
+
                   <li><a href="#">修改密码</a></li>
+
                   <li role="separator" class="divider"></li>
-                  <li><a href="#">Separated link</a></li>
+
+                  <li><a href="{{url_for('general.logout')}}">登出</a></li>
+
               </ul>
+
           </li>
           {% else %}
           <li><a href="{{url_for('general.login_register')}}">登录/注册</a></li>

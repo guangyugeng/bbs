@@ -14,8 +14,9 @@ main = Blueprint('api', __name__)
 @main.route('/login', methods=['POST'])
 def login():
     form = request.get_json()
+    log(form)
     r = user.login(form)
-    log('r',r['msg'],r['valid'])
+    log(r)
     return jsonify(r)
 
 
@@ -36,7 +37,7 @@ def register():
 
     r = user.register(form)
     log(('r',r['msg']))
-    return jsonify(r)
+    return json.dumps(r, ensure_ascii=False)
 
 
 # @main.route('/api/user/edit', methods=['POST'])

@@ -1,4 +1,9 @@
+var log = function() {
+  console.log(arguments)
+}
+
 var api = {}
+
 api._ajax = function(url, method, data, contentType, callback){
     var csrfToken = $('meta[name=csrf-token]').attr('content')
     var request = {
@@ -7,14 +12,13 @@ api._ajax = function(url, method, data, contentType, callback){
         contentType: contentType,
         data: data,
         headers: {'X-CSRFToken': csrfToken},
-        success: function(response){
-            var r = JSON.parse(response)
+        success: function(r){
             callback(r)
         },
         error: function(err){
             var r = {
-                'valid': false,
-                'msg': {'.message':'网络错误'}
+                'success': false,
+                'message': {'.message':'网络错误'}
             }
             callback(r)
         }
@@ -34,7 +38,6 @@ api.post = function(url, data, callback){
 api.get = function(url, data, callback){
     api.ajax(url, 'get', data, callback)
 }
-
 
 
 //var base_url = 'http://kaede.cc'

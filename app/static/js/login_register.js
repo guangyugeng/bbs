@@ -6,7 +6,6 @@ var log = function() {
 
 
 var bindEventLoginToggle = function(){
-    log("login toggle")
     $(".check-box").on("click", "ul.nav-tabs li" ,function(event) {
         log('Toggle')
         $("ul.nav-tabs li").removeClass("active");
@@ -22,71 +21,96 @@ var bindEventLoginToggle = function(){
 
 
 var bindEventLogin = function(event){
-    $("#login-form").submit(function(event) {
+    $(".btn-login").on('click', function(event) {
 
         var view = $(event.target).closest('#login-box')
         var username = $(view).find('.username').first().val()
         var password = $(view).find('.password').first().val()
-        var form = {
-            'username': username,
-            'password': password
-        }
-        log(username,password)
 
-        var response = function(r){
-            log(r,r.valid,r.msg)
-            if (r.valid){
-                window.location.href = document.referrer
+        log(username,password)
+        var required = (username != '' && password != '')
+
+
+        if (!required){
+            required = $(view).find(".login-required").first()
+            log(required)
+            required.text("不能为空")
+        }
+        else{
+            var form = {
+                'username': username,
+                'password': password
             }
-            else{
-                var message = r.msg
-                for (var k in message){
-                    var p_message = $(view).find(k).first()
-                    p_message.text(message[k])
-                    p_message.addClass('error')
+            var response = function(r){
+                log(r,r.valid,r.msg)
+                if (r.valid){
+                    alert("success")
+                    location.href = document.referrer
+                }
+                else{
+                    var message = r.msg
+                    for (var k in message){
+                        var p_message = $(view).find(k).first()
+                        p_message.text(message[k])
+                        p_message.addClass('error')
+                    }
                 }
             }
-        }
+
         api.login(form, response)
+        }
+
+
     });
 }
 
 
 var bindEventRegister = function(event){
-    $("#register-form").submit(function(event) {
+        $(".btn-register").on('click', function(event) {
 
-    var view = $(event.target).closest('#register-box')
-    var username = $(view).find('.username').first().val()
-    var nickname = $(view).find('.nickname').first().val()
-    var password = $(view).find('.password').first().val()
-    var email = $(view).find('.email').first().val()
+        var view = $(event.target).closest('#register-box')
+        var username = $(view).find('.username').first().val()
+        var nickname = $(view).find('.nickname').first().val()
+        var password = $(view).find('.password').first().val()
+        var email = $(view).find('.email').first().val()
 
-    var form = {
-        'username': username,
-        'nickname': nickname,
-        'password': password,
-        'email': email
-    }
-    log(form.email,email,username,password,nickname)
-    var response = function(r){
-        log(r,r.valid,r.msg)
-        if (r.valid){
-            alert("success")
-            window.location.href = document.referrer
+        log(username,password)
+        var required = (username != '' && password != '' && nickname != '' && email != '')
+
+
+        if (!required){
+            required = $(view).find(".register-required").first()
+            log(required)
+            required.text("不能为空")
         }
         else{
-            alert("fail")
-            var message = r.msg
-            log(message)
-            for (var k in message){
-                var p_message = $(view).find(k).first()
-                p_message.text(message[k])
-               p_message.addClass('error')
+            var form = {
+                'username': username,
+                'nickname': nickname,
+                'password': password,
+                'email': email
             }
+            log(form.email,email,username,password,nickname)
+            var response = function(r){
+                log(r,r.valid,r.msg)
+                if (r.valid){
+                    alert("success")
+                    window.location.href = document.referrer
+                }
+                else{
+                    alert("fail")
+                    var message = r.msg
+                    log(message)
+                    for (var k in message){
+                        var p_message = $(view).find(k).first()
+                        p_message.text(message[k])
+                       p_message.addClass('error')
+                    }
+                }
+            }
+            api.register(form, response)
         }
-    }
-    api.register(form, response)
-    });
+        });
 }
 
 
@@ -120,7 +144,6 @@ var bindEventRegisterValid = function(){
 
 
 var bindLoginRegisterEvents = function() {
-    log("bindEventLoginToggle")
     bindEventLoginToggle()
     bindEventRegister()
     bindEventLogin()
@@ -128,7 +151,6 @@ var bindLoginRegisterEvents = function() {
 
 
 $(document).ready(function(){
-    log('L_R')
     bindLoginRegisterEvents()
 
 })
