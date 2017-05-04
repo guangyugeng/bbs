@@ -1,11 +1,10 @@
-<!-- extend from base layout -->
-
 {% extends "base.html" %}
 {% block script %}
+{{super()}}
 <script src="/static/js/login_register.js"></script>
-<script src="/static/js/api/login_register.js"></script>
 {% endblock %}
 {% block content %}
+
 
     <div class="container">
         <div class="row">
@@ -23,68 +22,72 @@
                 <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19. -->
                 <!-- The form should work on most web servers, but if the form is not working you may need to configure your web server differently. -->
 
-                    <div class="row control-group">
-                        <div class="form-group col-xs-12 floating-label-form-group controls">
-                            <label for="username">用户名</label>
-                            <input type="text" class="form-control username" placeholder="用户名" minlength="3" maxlength="20" required="required" data-validation-required-message="请输入用户名.">
-                            <small><p class="text-center message username-message">
-                            </p></small>
-                            <p class="help-block text-danger help-username"></p>
+                    <form class="form-horizontal" role="form" method="POST" action="{{url_for('api.register')}}">
+                        {{ register_form.csrf_token }}
+                      <div class="form-group col-xs-12 control-group">
+                        <label for="username" class="col-sm-2 control-label">用户名</label>
+                        <div class="controls col-sm-10">
+                            {{ register_form.register_username(class="form-control",placeholder="请输入用户名",minlength="4",maxlength="20",required="required",
+                            **{'data-validation-regex-regex':'[^\s@#$^&*]*','data-validation-regex-message':'不能含有非法字符','data-validation-required-message':'请输入用户名'}) }}
+                            <p class="help-block"></p>
                         </div>
-                    </div>
-                    <div class="row control-group">
-                        <div class="form-group col-xs-12 floating-label-form-group controls">
-                            <label for="nickname">昵称</label>
-                            <input type="text" class="form-control nickname" placeholder="昵称" minlength="2" maxlength="20" required="required" data-validation-required-message="请输入昵称.">
-                            <small><p class="text-center message nickname-message">
+                      </div>
+                      <div class="form-group col-xs-12 control-group">
+                        <label for="nickname" class="col-sm-2 control-label">昵称</label>
+                        <div class="controls col-sm-10">
+                            {{ register_form.register_nickname(class="form-control",placeholder="请输入昵称",minlength="2",maxlength="20",required="required",
+                            **{'data-validation-regex-regex':'[^\s@#$^&*]*','data-validation-regex-message':'不能含有非法字符','data-validation-required-message':'请输入昵称'}) }}
+                            <p class="help-block"></p>
 
-                            </p></small>
-                            <p class="help-block text-danger"></p>
                         </div>
-                    </div>
-                    <div class="row control-group">
-                        <div class="form-group col-xs-12 floating-label-form-group controls">
-                            <label for="email">邮箱地址</label>
-                            <input type="email" class="form-control email" name="Email" placeholder="邮箱地址" minlength="6" maxlength="30" required="required" data-validation-required-message="请输入邮箱地址." />
-                            <small><p class="text-center message email-message">
+                      </div>
+                      <div class="form-group col-xs-12 control-group">
+                        <label for="email" class="col-sm-2 control-label">邮箱</label>
+                        <div class="controls col-sm-10">
+                            {{ register_form.register_email(type="email",class="form-control",placeholder="请输入邮箱",minlength="6",maxlength="20",required="required",
+                            **{'data-validation-regex-regex':'[^\s#$^&*]*','data-validation-regex-message':'不能含有非法字符','data-validation-required-message':'请输入邮箱'}) }}
+                            <p class="help-block"></p>
 
-                            </p></small>
-                            <p class="help-block text-danger"></p>
                         </div>
-                    </div>
-                     <div class="row control-group">
-                        <div class="form-group col-xs-12 floating-label-form-group controls">
-                            <label for="email">确认邮箱地址</label>
-                            <input type="email" class="form-control" placeholder="邮箱地址" required="required" data-validation-matches-match="Email" data-validation-required-message="请输入邮箱地址." />
-                            <p class="help-block text-danger"></p>
-                        </div>
-                    </div>
-                    <div class="row control-group">
-                        <div class="form-group col-xs-12 floating-label-form-group controls">
-                            <label for="password">密码</label>
-                            <input type="password" name="register-password" class="form-control password" placeholder="密码" minlength="3" maxlength="20" required="required" data-validation-required-message="请输入密码.">
-                            <small><p class="text-center message password-message">
-                            </p></small>
+                      </div>
+                      <div class="form-group col-xs-12 control-group">
+                        <label for="email" class="col-sm-2 control-label">确认邮箱</label>
+                        <div class="controls col-sm-10">
+                            {{ register_form.r_register_email(class="form-control",placeholder="请重复输入邮箱",minlength="6",maxlength="20",required="required",
+                            **{'data-validation-regex-regex':'[^\s#$^&*]*','data-validation-regex-message':'不能含有非法字符','data-validation-required-message':'请输入邮箱', 'data-validation-matches-match':'register_email'}) }}
+                            <p class="help-block"></p>
 
-                            <p class="help-block text-danger"></p>
                         </div>
-                    </div>
-                    <div class="row control-group">
-                        <div class="form-group col-xs-12 floating-label-form-group controls">
-                            <label for="password">确认密码</label>
-                            <input type="password" class="form-control password" placeholder="确认密码" required="required" data-validation-matches-match="register-password" data-validation-required-message="请再次输入密码.">
+                      </div>
+                      <div class="form-group col-xs-12 control-group">
+                        <label for="password" class="col-sm-2 control-label">密码</label>
+                        <div class="controls col-sm-10">
+                            {{ register_form.register_password(class="form-control",placeholder="请输入密码",minlength="3",maxlength="20",required="required",
+                            **{'data-validation-regex-regex':'[^\s@#$^&*]*','data-validation-regex-message':'不能含有非法字符','data-validation-required-message':'请输入密码'}) }}
+                            <p class="help-block"></p>
 
-                            <p class="help-block text-danger"></p>
                         </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="form-group col-xs-12">
-                            <button type="submit" class="btn btn-register btn-lg">Send</button>
+                      </div>
+                      <div class="form-group col-xs-12 control-group">
+                        <label for="password" class="col-sm-2 control-label">确认密码</label>
+                        <div class="controls col-sm-10">
+                            {{ register_form.r_register_password(class="form-control",placeholder="请重复输入密码",minlength="3",maxlength="20",required="required",
+                            **{'data-validation-regex-regex':'[^\s@#$^&*]*','data-validation-regex-message':'不能含有非法字符','data-validation-required-message':'请确认输入密码'}) }}
+                            <p class="help-block"></p>
+
                         </div>
-                        <small><p class="text-center register-required">
+                      </div>
+                      <div class="form-group col-xs-12">
+                        <div class="col-sm-offset-2 col-sm-10">
+                          <button type="submit" class="btn btn-login btn-lg">注册</button>
+                        </div>
+                      </div>
+                        <small><p class="text-center login-required">
+
                         </p></small>
-                    </div>
+
+                        </form>
+
 
             </div>
 
@@ -92,68 +95,63 @@
                 <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19. -->
                 <!-- The form should work on most web servers, but if the form is not working you may need to configure your web server differently. -->
 
-                    <div class="row control-group">
-                        <div class="form-group col-xs-12 floating-label-form-group controls">
-                            <label for="username">用户名</label>
-                            <input type="text" class="form-control username input-large" placeholder="用户名" required="required" data-validation-required-message="请输入用户名.">
+                    <form class="form-horizontal" role="form" method="POST" action="{{url_for('api.login')}}">
+                        {{ login_form.csrf_token }}
+                      <div class="form-group col-xs-12 control-group">
+                        <label for="username" class="col-sm-2 control-label">用户名</label>
+                        <div class="controls col-sm-10">
+                            {{ login_form.login_username(class="form-control",placeholder="请输入用户名",minlength="3",maxlength="20",required="required",**{'data-validation-required-message':'请输入用户名'}) }}
                             <p class="help-block text-danger"></p>
-                        </div>
-                    </div>
-                    <div class="row control-group">
-                        <div class="form-group col-xs-12 floating-label-form-group controls">
-                            <label for="password">密码</label>
-                            <input type="text" class="form-control password input-large" placeholder="密码" required="required" data-validation-required-message="请输入密码.">
-                            <p class="help-block text-danger"></p>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row div-message ">
-                        <small><p class="text-center login-message message">
-                        </p></small>
 
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-xs-12">
-                            <button type="submit" class="btn btn-login btn-lg">Send</button>
-                        </div>
-                        <small><p class="text-center login-required">
-                        </p></small>
 
-                    </div><form>
-                    <div class="control-group">
-                      <label class="control-label" for="inputIcon">Email address</label>
-                      <div class="controls">
-                        <div class="input-prepend">
-                          <span class="add-on"><i class="icon-envelope"></i></span>
-                          <input class="span2" id="inputIcon" type="text">
                         </div>
                       </div>
-                    </div></form>
+                      <div class="form-group col-xs-12 ">
+                        <label for="password" class="col-sm-2 control-label">密码</label>
+                        <div class="controls col-sm-10">
+                            {{ login_form.login_password(class="form-control",placeholder="请输入密码",minlength="3",maxlength="20",required="required",**{'data-validation-required-message':'请输入密码'}) }}
+                            <p class="help-block text-danger"></p>
+
+
+                        </div>
+
+
+                        </div>
+
+                      <div class="form-group col-xs-12">
+                        <div class="col-sm-offset-2 col-sm-10">
+                          <div class="checkbox">
+                            <label>
+                              <input type="checkbox">请记住我
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group col-xs-12">
+                        <div class="col-sm-offset-2 col-sm-10">
+                          <button type="submit" class="btn btn-login btn-lg">登录</button>
+                        </div>
+                      </div>
+                        <small><p class="text-center login-required">
+
+                        </p></small>
+
+                    </form>
 
             </div>
+
+            </div>
+        <div class="row">
+{% for message in get_flashed_messages() %}
+<div class="alert alert-warning">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{ message }}
+</div>
+{% endfor %}
+</div>
         </div>
     </div>
 
-<form class="form-horizontal">
-      <div class="control-group">
-        <label class="control-label" for="inputEmail">Email</label>
-        <div class="controls">
-          <input type="text" id="inputEmail" placeholder="Email">
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="inputPassword">Password</label>
-        <div class="controls">
-          <input type="password" id="inputPassword" placeholder="Password">
-        </div>
-      </div>
-      <div class="control-group">
-        <div class="controls">
-          <label class="checkbox">
-            <input type="checkbox"> Remember me
-          </label>
-          <button type="submit" class="btn">Sign in</button>
-        </div>
-      </div>
-    </form>
+
+
 {% endblock %}

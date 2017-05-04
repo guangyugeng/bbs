@@ -145,8 +145,7 @@ var bindEventRegisterValid = function(){
 
 var bindLoginRegisterEvents = function() {
     bindEventLoginToggle()
-    bindEventRegister()
-    bindEventLogin()
+
 }
 
 

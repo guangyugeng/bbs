@@ -38,20 +38,19 @@ def load_user(id):
 
 @main.route('/login_register', methods = ['GET'])
 def login_register():
-    # login_form = LoginForm()
-    # register_form = RegisterForm()
+    login_form = LoginForm()
+    register_form = RegisterForm()
     u = g.user
     if u.is_authenticated:
         return redirect(url_for('general.index'))
     else:
-        return render_template('general/login_register.html')
-                              # title = 'Sign In',
-                              # login_form = login_form,
-                              # register_form = register_form)
+        return render_template('general/login_register.html',
+                              login_form = login_form,
+                              register_form = register_form)
 
 
-@login_required
 @main.route('/logout')
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('general.index'))

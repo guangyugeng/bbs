@@ -65,10 +65,10 @@ class User(db.Model, ModelMin):
         # if r['valid'] == False:
         #     k,v = r['msg'].popitem()
         #     raise ValueError('msg{}:{}'.format(k,v) )
-        self.username = form.get('username', '')
-        self.password = form.get('password', '')
-        self.nickname = form.get('nickname', '')
-        self.email = form.get('email', '')
+        self.username = form.get('register_username', '')
+        self.password = form.get('register_password', '')
+        self.nickname = form.get('register_nickname', '')
+        self.email = form.get('register_email', '')
 
     @staticmethod
     def view(username):

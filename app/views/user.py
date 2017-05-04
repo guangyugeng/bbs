@@ -2,7 +2,7 @@ from flask import render_template, flash, session, redirect, url_for,Blueprint,a
 from app.models import User
 from flask_login import login_user, logout_user, current_user, login_required
 from datetime import datetime
-
+from app.forms import ChangeInfoForm, ChangePasswordForm
 
 main = Blueprint('user', __name__)
 #
@@ -31,17 +31,20 @@ main = Blueprint('user', __name__)
 @login_required
 def info(username):
     view_user = User.view(username)
-    check_user = g.user
+    # check_user = g.user
     return render_template('user/info.html',
-                           view_user=view_user,
-                           check_user=check_user)
+                           view_user=view_user)
 
 
 @main.route('/setting')
 @login_required
 def setting():
     user = g.user
+    info_form = ChangeInfoForm()
+    password_form = ChangePasswordForm()
     return render_template('user/setting.html',
+                           info_form=info_form,
+                           password_form=password_form,
                            user=user)
 
 

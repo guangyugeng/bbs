@@ -2,6 +2,17 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+<ul class="nav nav-tabs">
+	<li class="active">
+		<a href="#avatar" data-toggle="tab">修改头像</a>
+	</li>
+	<li><a href="#info" data-toggle="tab">修改个人信息</a></li>
+	<li><a href="#password" data-toggle="tab">修改密码</a></li>
+</ul>
+<div class="row tab-content">
+	<div class="tab-pane fade in active" id="avatar">
+
 <div class="set-avatar box">
     <div class="box-header underline">
         <a class="my-link" href="/">{{hostname}}</a>
@@ -29,92 +40,110 @@
                 <input id="data-img-nh" type="hidden" name="nh" value="">
                 <input class="file-input" type="file" accept="image/*" name="photo" required>
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                {% for category, message in messages %}
-                <p class="{{ category }}">{{ message }}</p>
-                {% endfor %}
-                {% endwith %}
+
                 <button class="btn btn-set-avatar" name="button">上传头像</button>
             </div>
         </form>
     </div>
-</div>
-<div class="set-info box">
-    <div class="box-header underline">
-        <a class="my-link" href="/">{{hostname}}</a>
-        <span>&nbsp;>&nbsp; 设置</span>
-    </div>
-    <div class="form center">
-        <table>
-            <tr>
-                <td>
-                    <span>用户名:</span>
-                </td>
-                <td>
-                    <span>{{user.username}}</span>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span>昵称:</span>
-                </td>
-                <td>
-                    <input class="nickname" type="text" required value="{{user.nickname}}">
-                    <small><p class="nickname-message message"></p></small>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span>电子邮箱:</span>
-                </td>
-                <td>
-                    <input class="email" type="email" required value="{{user.email}}">
-                    <small><p class="email-message message"></p></small>
-                </td>
-            </tr>
-        </table>
-        <button class="btn btn-set-info" name="button">保存修改</button>
-    </div>
-</div>
-<div class="password-change box">
-    <div class="box-header underline">
-        <a class="my-link" href="/">{{hostname}}</a>
-        <span>&nbsp;>&nbsp; 修改密码</span>
-    </div>
-    <div class="form center">
-        <table>
-            <tr>
-                <td>
-                    <span>当前密码:</span>
-                </td>
-                <td>
+</div>	</div>
+	<div class="tab-pane fade" id="info">
 
-                    <input class="old-password" type="password" value="">
-                    <small><p class="old-psw-message message">请输入当前密码</p></small>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span>新密码:</span>
-                </td>
-                <td>
-                    <input name="new-password" class="form-control new-password" type="password" placeholder="密码" minlength="3" maxlength="20" required="required" data-validation-required-message="请输入密码.">
-                    <input class="new-password" type="password" value="">
-                    <small><p class="password-message message">输入8-20位密码,只能使用英文字母、下划线及数字</p></small>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span>重复新密码:</span>
-                </td>
-                <td>
-                    <input class="confirm-password" type="password" value="">
-                    <small><p class="confirm-message message">重复输入的密码</p></small>
-                </td>
-            </tr>
-        </table>
-        <button class="btn btn-change-password" name="button">修改密码</button>
-    </div>
-</div>
+                    <form class="form-horizontal" role="form" method="POST" action="{{url_for('api.change_info')}}">
+                        {{ info_form.csrf_token }}
+                      <div class="form-group col-xs-12 control-group">
+                        <label for="nickname" class="col-sm-2 control-label">昵称</label>
+                        <div class="controls col-sm-10">
+                            {{ info_form.change_nickname(value=user.nickname,class="form-control",placeholder="请输入昵称",minlength="2",maxlength="20",required="required",
+                            **{'data-validation-regex-regex':'[^\s@#$^&*]*','data-validation-regex-message':'不能含有非法字符','data-validation-required-message':'请输入昵称'}) }}
+                            <p class="help-block"></p>
 
+                        </div>
+                      </div>
+                      <div class="form-group col-xs-12 control-group">
+                        <label for="email" class="col-sm-2 control-label">邮箱</label>
+                        <div class="controls col-sm-10">
+                            {{ info_form.change_email(value=user.email,type="email",class="form-control",placeholder="请输入邮箱",minlength="6",maxlength="20",required="required",
+                            **{'data-validation-regex-regex':'[^\s#$^&*]*','data-validation-regex-message':'不能含有非法字符','data-validation-required-message':'请输入邮箱'}) }}
+                            <p class="help-block"></p>
+
+                        </div>
+                      </div>
+                      <div class="form-group col-xs-12 control-group">
+                        <label for="email" class="col-sm-2 control-label">确认新邮箱</label>
+                        <div class="controls col-sm-10">
+                            {{ info_form.r_change_email(class="form-control",placeholder="请重复输入新邮箱",minlength="6",maxlength="20",required="required",
+                            **{'data-validation-regex-regex':'[^\s#$^&*]*','data-validation-regex-message':'不能含有非法字符','data-validation-required-message':'请输入邮箱', 'data-validation-matches-match':'change_email'}) }}
+                            <p class="help-block"></p>
+
+                        </div>
+                      </div>
+                      <div class="form-group col-xs-12">
+                        <div class="col-sm-offset-2 col-sm-10">
+                          <button type="submit" class="btn btn-login btn-lg">保存修改</button>
+                        </div>
+                      </div>
+                        <small><p class="text-center login-required">
+
+                        </p></small>
+
+                        </form>
+    </div>
+	<div class="tab-pane fade" id="password">
+
+                    <form class="form-horizontal" role="form" method="POST" action="{{url_for('api.change_password')}}">
+                        {{ password_form.csrf_token }}
+
+                      <div class="form-group col-xs-12 control-group">
+                        <label for="password" class="col-sm-2 control-label">当前密码</label>
+                        <div class="controls col-sm-10">
+                            {{ password_form.old_password(class="form-control",placeholder="请输入当前密码",minlength="3",maxlength="20",required="required",
+                            **{'data-validation-regex-regex':'[^\s@#$^&*]*','data-validation-regex-message':'不能含有非法字符','data-validation-required-message':'请输入密码'}) }}
+                            <p class="help-block"></p>
+
+                        </div>
+                      </div>
+                      <div class="form-group col-xs-12 control-group">
+                        <label for="password" class="col-sm-2 control-label">新密码</label>
+                        <div class="controls col-sm-10">
+                            {{ password_form.change_password(class="form-control",placeholder="请输入新密码",minlength="3",maxlength="20",required="required",
+                            **{'data-validation-regex-regex':'[^\s@#$^&*]*','data-validation-regex-message':'不能含有非法字符','data-validation-required-message':'请输入密码'}) }}
+                            <p class="help-block"></p>
+
+                        </div>
+                      </div>
+                      <div class="form-group col-xs-12 control-group">
+                        <label for="password" class="col-sm-2 control-label">确认新密码</label>
+                        <div class="controls col-sm-10">
+                            {{ password_form.r_change_password(class="form-control",placeholder="请重复输入新密码",minlength="3",maxlength="20",required="required",
+                            **{'data-validation-regex-regex':'[^\s@#$^&*]*','data-validation-regex-message':'不能含有非法字符','data-validation-required-message':'请确认输入密码'}) }}
+                            <p class="help-block"></p>
+
+                        </div>
+                      </div>
+                      <div class="form-group col-xs-12">
+                        <div class="col-sm-offset-2 col-sm-10">
+                          <button type="submit" class="btn btn-login btn-lg">保存修改</button>
+                        </div>
+                      </div>
+                        <small><p class="text-center login-required">
+
+                        </p></small>
+
+                        </form>
+
+	</div>
+</div>
+<script>
+	$(function () {
+		$('#myTab li:eq(1) a').tab('show');
+	});
+</script>
+<div class="row">
+{% for message in get_flashed_messages() %}
+<div class="alert alert-warning">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{ message }}
+</div>
+{% endfor %}
 {% endblock %}
+</div>
