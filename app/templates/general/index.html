@@ -1,27 +1,69 @@
 {% extends "base.html" %}
 {% block content %}
+<ul class="nav nav-tabs">
+    <li class="{% if selected_node is none%}
+        active
+    {% endif %}"><a class="node-item {% if selected_node is none %}node-selected{% endif %}" href="/">All</a></li>
+    {% for n in node_list %}
+        <li class="{% if selected_node is not none and n.name == selected_node%}
+        active
+    {% endif %}"><a class="node-item
+    {% if selected_node is not none and n.name == selected_node%}
+        node-selected
+    {% endif %}
+        " href="/{{n.name}}">{{n.name}}</a></li>
+    {% endfor %}
+</ul>
 
-
-    <form class="form-horizontal">
-      <div class="control-group">
-        <label class="control-label">Type something</label>
-        <div class="controls">
-          <input type="text" name="some_field" />
-          <p class="help-block"></p>
+<div class="div-post-list">
+    {% if post_list == [] %}
+    <div class="no-post">
+        <a class="btn-new-post" href="/post/new">创建一个新主题>></a>
+    </div>
+    {% else %}
+    {% for p in post_list %}
+        <div class="post-item inner-box clearfix">
+            <div class="post-user-avatar float-left">
+                <img class="img-middle" src="{{p.user.avatar}}" alt="" />
+            </div>
+            <div class="post-item-right float-left">
+                <div class="post-title">
+                    <a class="my-link" href="{{url_for('post.view', post_id=p.id)}}">{{p.title}}</a>
+                </div>
+                <div class="post-info">
+                    <small>
+                        <a class="link-node" href="/{{p.node.name}}">{{p.node.name}}</a>
+                        <span>&nbsp;•&nbsp;</span>
+                        <a class="my-link" href="{{url_for('user.info',username=p.user.username)}}">{{p.user.username}}</a>
+                        <span>&nbsp;•&nbsp;</span>
+                        <time>{{p.created_time}}</time>
+                        <span>发布</span>
+                    </small>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label">Type it again</label>
-        <div class="controls">
-          <input
-            type="text"
-            data-validation-match-match="some_field"
-            name="some_other_field"
-          />
-          <p class="help-block"></p>
-        </div>
-      </div>
-    </form>
+    {% endfor %}
 
+        <ul class="pagination">
+            {% if paginate.has_prev %}
+            <li><a class="page_button" href="{{ url_for('general.index', page=paginate.prev_num) }}">上一页</a></li>
+            {% endif %}
+            {% for n in paginate.iter_pages()%}
+            {% if n == paginate.page %}
+                <li class="active"><a class="page_num page_selected">{{ n }}</a></li>
+            {% else %}
+                {% if n is none%}
+                <li><span class="page_num">...</span></li>
+                {%else%}
+                <li><a class="page_num" href="{{ url_for('general.index', page=n)}}">{{ n }}</a></li>
+                {% endif %}
+            {% endif %}
+            {% endfor %}
+            {% if paginate.has_next %}
+            <li><a class="page_button" href="{{ url_for('general.index', page=paginate.next_num) }}">下一页</a></li>
+            {% endif %}
+        </ul>
 
+    {% endif %}
+</div>
 {% endblock %}

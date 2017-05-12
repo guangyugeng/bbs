@@ -31,10 +31,14 @@ lm.init_app(app)
 from app.views.general import main as general
 from app.views.api import main as api
 from app.views.user import main as user
+from app.views.admin import main as admin
+from app.views.post import main as post
 
 app.register_blueprint(general)
 app.register_blueprint(api, url_prefix='/api')
 app.register_blueprint(user, url_prefix='/user')
+app.register_blueprint(admin, url_prefix='/admin')
+app.register_blueprint(post, url_prefix='/post')
 # Because we're security-conscious developers, we also hard-code disabling
 # the CDN support (this might become a default in later versions):
 # app.config['BOOTSTRAP_SERVE_LOCAL'] = True

@@ -16,7 +16,7 @@
         <div class="profile-top clearfix">
             <div class="profile-top-left float-left">
                 <div class="avatar">
-                    <img class="img-big" src="{{check_user.avatar}}" alt="" />
+                    <img class="img-big" src="#" alt="" />
                 </div>
             </div>
             <div class="profile-top-right float-left">
@@ -46,7 +46,7 @@
                 <small>
                     <a class="link-node" href="/{{p.node.name}}">{{p.node.name}}</a>
                     <span>&nbsp;•&nbsp;</span>
-                    <a class="my-link" href="{{url_for('user.info_view', username=p.user.username)}}"><strong>{{p.user.username}}</strong></a>
+                    <a class="my-link" href="{{url_for('user.info', username=p.user.username)}}"><strong>{{p.user.username}}</strong></a>
                     <span>&nbsp;•&nbsp;</span>
                     <time>{{p.created_time}}</time>
                 </small>

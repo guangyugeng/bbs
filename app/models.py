@@ -13,6 +13,8 @@ ROLE_ADMIN = 1
 
 
 class ModelMin(object):
+    # hidden = db.Column(db.Boolean, default=False)
+
     def __repr__(self):
         classname = self.__class__.__name__
         properties = ['{}: ({})'.format(k, v) for k, v in self.__dict__.items()]
@@ -39,10 +41,13 @@ class ModelMin(object):
     def new(cls, form):
         m = cls(form)
         m.save()
+        return m
 
 
 def timestamp():
-    return datetime.now()
+    log(datetime.now())
+    t = datetime.now()
+    return t
 
 
 class User(db.Model, ModelMin):
@@ -53,6 +58,7 @@ class User(db.Model, ModelMin):
     nickname = db.Column(db.String(64), unique = True)
     email = db.Column(db.String(120), index = True, unique = True)
     password = db.Column(db.String(120), index = True)
+    avatar = db.Column(db.String(200), default='/static/avatar/default_avatar.jpg')
     # role = db.Column(db.SmallInteger, default = ROLE_USER)
     # user_info= db.Column(db.String(140))
     last_seen = db.Column(db.DateTime)
@@ -75,7 +81,7 @@ class User(db.Model, ModelMin):
         # data = {}
         user = User.query.filter_by(username=username).first()
         # data['view_user'] = user
-        return user.__dict__
+        return user
 
     def is_authenticated(self):
         return True
@@ -95,7 +101,12 @@ class User(db.Model, ModelMin):
     def __repr__(self):
         return '<User %r>' % (self.username)
 
-
+    def json(self):
+        json = {
+            'username':self.username,
+            'avatar': self.avatar
+        }
+        return json
 
 
 class Comment(db.Model, ModelMin):
@@ -111,8 +122,10 @@ class Comment(db.Model, ModelMin):
 
     def __init__(self, form):
         self.created_time = timestamp()
+        log('time',self.created_time)
         self.edited_time = timestamp()
         self.user_id = form.get('user_id')
+        log('user',self.user_id)
         self.content = form.get('content')
         self.post_id = form.get('post_id')
 
@@ -134,6 +147,20 @@ class Topic(db.Model, ModelMin):
     def __init__(self, name):
         self.name = name
 
+    @classmethod
+    def user_list(cls):
+        # data = {}
+        topic_list = Topic.query.filter_by().all()
+        first_list = ['技术','创意','好玩','Apple','酷工作','交易','城市']
+        if topic_list == []:
+            for name in first_list:
+                t = Topic(name)
+                t.save()
+            topic_list = Topic.query.filter_by().all()
+
+        # data['node_list'] = node_list
+        return topic_list
+
 
 
 class Post(db.Model, ModelMin):
@@ -151,6 +178,7 @@ class Post(db.Model, ModelMin):
 
     def __init__(self, form):
         self.created_time = timestamp()
+        log('time',self.created_time)
         self.edited_time = timestamp()
         self.user_id = form.get('user_id', '')
         self.title = form.get('title', '')
@@ -190,11 +218,14 @@ class Node(db.Model, ModelMin):
     #     node = cls(form)
     #     node.save()
     #
-    # @classmethod
-    # def user_list(cls):
-    #     data = {}
-    #     node_list = Node.query.filter_by(hidden=False)
-    #     data['node_list'] = node_list
+    @classmethod
+    def user_list(cls):
+        # data = {}
+        log("start")
+        node_list = Node.query.filter_by(hidden=False).all()
+        log(node_list)
+        # data['node_list'] = node_list
+        return node_list
 
     def json(self):
         r = {

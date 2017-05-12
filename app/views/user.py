@@ -30,22 +30,22 @@ main = Blueprint('user', __name__)
 @main.route('/<string:username>/info')
 @login_required
 def info(username):
-    view_user = User.view(username)
+    # view_user =
     # check_user = g.user
     return render_template('user/info.html',
-                           view_user=view_user)
+                           view_user=User.view(username))
 
 
 @main.route('/setting')
 @login_required
 def setting():
-    user = g.user
-    info_form = ChangeInfoForm()
-    password_form = ChangePasswordForm()
+    # user = g.user
+    # info_form = ChangeInfoForm()
+    # password_form = ChangePasswordForm()
     return render_template('user/setting.html',
-                           info_form=info_form,
-                           password_form=password_form,
-                           user=user)
+                           info_form=ChangeInfoForm(),
+                           password_form=ChangePasswordForm(),
+                           user=g.user)
 
 
 #

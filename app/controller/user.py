@@ -2,7 +2,16 @@ from app.models import User
 from flask_login import login_user
 from functools import wraps
 from utils import log
-from flask import g
+from flask import g, abort
+
+def admin_required(f):
+    @wraps(f)
+    def function(*args, **kwargs):
+        u = g.user
+        if u is None or u.id != 1:
+            abort(404)
+        return f(*args, **kwargs)
+    return function
 
 def login_valid(function):
     @wraps(function)
@@ -92,19 +101,39 @@ def change_password_valid(function):
     @wraps(function)
     def wrapper(*args, **kwargs):
         form = args[0]
-        old = form.get('old-password')
-
-        # u = User.query.filter_by(username=username).first()
+        old = form.get('old_password')
+        new = form.get('change_password')
+        log(old,new)
+        # if g.user.password == old:
+        #     nn_valid = True
+        # else:
+        #     nn_valid_msg = nickname_valid(nickname)
+        #     nn_valid = nn_valid_msg['valid']
+        #     msg.update(nn_valid_msg['msg'])
+        # if g.user.email == email:
+        #     e_valid = True
+        # else:
+        #     e_valid_msg = email_valid(email)
+        #     e_valid = e_valid_msg['valid']
+        #     msg.update(e_valid_msg['msg'])
+        # r = dict(
+        #     valid=e_valid and nn_valid,
+        #     msg=msg
+        # )
+                # u = User.query.filter_by(username=username).first()
         # log('valid',u)
-        valid = g.user.password == old
-        log(valid)
+        # valid = False
+        # log(valid)
         r = dict(
-            valid=valid,
+            valid=False,
             msg=dict()
         )
         msg = r['msg']
-        if not valid:
+        if g.user.password != old:
             msg['.password-message'] = '当前密码错误'
+        elif old == new:
+            msg['.password-message'] = '不能与原密码相同'
+        r['valid'] = (g.user.password == old) and (old != new)
         args = form, r
         return function(*args, **kwargs)
     return wrapper
@@ -139,8 +168,8 @@ def change_info(form, r=dict):
 @change_password_valid
 def change_password(form, r=dict):
     if r['valid']:
-        g.user.nickname = form.get('change-nickname')
-        g.user.email = form.get('change-email')
+        g.user.password = form.get('change_password')
+        # g.user.email = form.get('change-email')
         g.user.save()
     return r
 

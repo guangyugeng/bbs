@@ -115,7 +115,8 @@
                         <label for="password" class="col-sm-2 control-label">确认新密码</label>
                         <div class="controls col-sm-10">
                             {{ password_form.r_change_password(class="form-control",placeholder="请重复输入新密码",minlength="3",maxlength="20",required="required",
-                            **{'data-validation-regex-regex':'[^\s@#$^&*]*','data-validation-regex-message':'不能含有非法字符','data-validation-required-message':'请确认输入密码'}) }}
+                            **{'data-validation-regex-regex':'[^\s@#$^&*]*','data-validation-regex-message':'不能含有非法字符',
+                            'data-validation-required-message':'请确认输入密码','data-validation-matches-match':'change_password'}) }}
                             <p class="help-block"></p>
 
                         </div>

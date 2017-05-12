@@ -1,7 +1,7 @@
 from flask_wtf import Form
 from wtforms.fields import *
 from wtforms.validators import DataRequired, Email, Length
-
+from app.models import Node
 
 class LoginForm(Form):
     login_username = StringField('login_username', validators=[DataRequired(),Length(min=3,max=20)])
@@ -26,6 +26,30 @@ class ChangePasswordForm(Form):
     old_password = PasswordField('old_password', validators=[DataRequired(),Length(min=6,max=20)])
     change_password = PasswordField('change_password', validators=[DataRequired(),Length(min=6,max=20)])
     r_change_password = PasswordField('r_change_password', validators=[DataRequired(),Length(min=6,max=20)])
+
+class AddPostForm(Form):
+    title = StringField('title', validators=[DataRequired(),Length(min=2,max=20)])
+    content = TextAreaField('content', validators=[DataRequired(),Length(min=20,max=1000)])
+    node = SelectField('node', validators=[DataRequired()])
+
+    def __init__(self, *args, **kwargs):
+        super(AddPostForm, self).__init__( *args,**kwargs)
+        self.node.choices = [(node.id, node.name) for node in Node.query.order_by().all()]
+
+
+# class EditPostForm(Form):
+#     title = StringField('title', validators=[DataRequired(),Length(min=2,max=20)])
+#     content = TextAreaField('content', validators=[DataRequired(),Length(min=20,max=1000)])
+#     node = SelectField('node', validators=[DataRequired()])
+#
+#     def __init__(self, *args, **kwargs):
+#         super(EditPostForm, self).__init__( *args,**kwargs)
+#         self.node.choices = [(node.id, node.name) for node in Node.query.order_by().all()]
+        # self.user_id = form.get('user_id', '')
+        # self.title = form.get('title', '')
+        # self.content = form.get('content', '')
+        # self.node_id = form.get('node_id')
+        # self.topic_id = form.get('topic_id')
 
 # from flask_wtf import Form
 # from wtforms.fields import *

@@ -5,6 +5,7 @@ from datetime import datetime
 from app import db, lm
 from app.models import User, ROLE_USER, ROLE_ADMIN
 from app.forms import LoginForm, RegisterForm
+from app.controller import post
 from flask_nav.elements import Navbar, View, Subgroup, Link, Text, Separator
 from flask_bootstrap import __version__ as FLASK_BOOTSTRAP_VERSION
 # import wtforms.q
@@ -23,12 +24,32 @@ main = Blueprint('general', __name__)
 @main.route('/', methods = ['GET'])
 def index():
     # print(g.user,'sdsds')
+    page = request.args.get('page', '1')
+    data = post.page(page)
     u = g.user
     if u.is_authenticated:
         return render_template('general/index.html',
-                               user = u)
+                               user = u,
+                               **data)
     else:
-        return render_template('general/index.html')
+        return render_template('general/index.html',
+                               **data)
+
+@main.route('/<string:node_name>')
+def node_index(node_name):
+    page = request.args.get('page', '1')
+    data = post.page(page,node_name)
+    print(data['selected_node'])
+    for n in data['node_list']:
+        print(n.name==data['selected_node'])
+    u = g.user
+    if u.is_authenticated:
+        return render_template('general/index.html',
+                               user = u,
+                               **data)
+    else:
+        return render_template('general/index.html',
+                               **data)
 
 
 @lm.user_loader

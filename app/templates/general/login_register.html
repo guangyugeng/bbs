@@ -54,7 +54,8 @@
                         <label for="email" class="col-sm-2 control-label">确认邮箱</label>
                         <div class="controls col-sm-10">
                             {{ register_form.r_register_email(class="form-control",placeholder="请重复输入邮箱",minlength="6",maxlength="20",required="required",
-                            **{'data-validation-regex-regex':'[^\s#$^&*]*','data-validation-regex-message':'不能含有非法字符','data-validation-required-message':'请输入邮箱', 'data-validation-matches-match':'register_email'}) }}
+                            **{'data-validation-regex-regex':'[^\s#$^&*]*','data-validation-regex-message':'不能含有非法字符',
+                            'data-validation-required-message':'请输入邮箱', 'data-validation-matches-match':'register_email'}) }}
                             <p class="help-block"></p>
 
                         </div>
@@ -72,7 +73,8 @@
                         <label for="password" class="col-sm-2 control-label">确认密码</label>
                         <div class="controls col-sm-10">
                             {{ register_form.r_register_password(class="form-control",placeholder="请重复输入密码",minlength="3",maxlength="20",required="required",
-                            **{'data-validation-regex-regex':'[^\s@#$^&*]*','data-validation-regex-message':'不能含有非法字符','data-validation-required-message':'请确认输入密码'}) }}
+                            **{'data-validation-regex-regex':'[^\s@#$^&*]*','data-validation-regex-message':'不能含有非法字符',
+                            'data-validation-required-message':'请确认输入密码','data-validation-matches-match':'register_password'}) }}
                             <p class="help-block"></p>
 
                         </div>
