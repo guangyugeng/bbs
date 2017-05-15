@@ -1,5 +1,9 @@
 <!-- extend base layout -->
 {% extends "base.html" %}
+{% block title %}
+设置
+{% endblock %}
+
 
 {% block content %}
 
@@ -13,39 +17,17 @@
 <div class="row tab-content">
 	<div class="tab-pane fade in active" id="avatar">
 
-<div class="set-avatar box">
-    <div class="box-header underline">
-        <a class="my-link" href="/">{{hostname}}</a>
-        <span>&nbsp;>&nbsp; 修改头像</span>
-    </div>
-    <div class="form center">
-        <form action="/api/upload/avatar" method="post" enctype="multipart/form-data">
-            <div class="fix-img">
-                <div class="float-left">
-                    <img id="selected-img" class="selected-img" src="{{ user.avatar }}">
-                </div>
-                <div class="preview float-right">
-                    <div class="img-preview img-big float-left">
-                    </div>
-                    <div class="img-preview img-middle float-left">
-                    </div>
-                    <div class="img-preview img-small float-left">
-                    </div>
-                </div>
-            </div>
-            <div class="action">
-                <input id="data-img-x" type="hidden" name="x" value="">
-                <input id="data-img-y" type="hidden" name="y" value="">
-                <input id="data-img-nw" type="hidden" name="nw" value="">
-                <input id="data-img-nh" type="hidden" name="nh" value="">
-                <input class="file-input" type="file" accept="image/*" name="photo" required>
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<img id="selected-img" class="selected-img" src="{{ user.avatar }}" height="40" width="40">
+    <form action="{{ url_for('api.upload_avatar') }}" method=POST enctype=multipart/form-data>
 
-                <button class="btn btn-set-avatar" name="button">上传头像</button>
-            </div>
-        </form>
+        <input type="file" accept="image/*" name="photo" required>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <button class="btn btn-set-avatar" name="button">上传头像</button>
+    </form>
+
+</div>
     </div>
-</div>	</div>
 	<div class="tab-pane fade" id="info">
 
                     <form class="form-horizontal" role="form" method="POST" action="{{url_for('api.change_info')}}">

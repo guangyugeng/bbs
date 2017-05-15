@@ -43,7 +43,7 @@
             </div>
         </div>
     {% endfor %}
-
+    {% if selected_node is none%}
         <ul class="pagination">
             {% if paginate.has_prev %}
             <li><a class="page_button" href="{{ url_for('general.index', page=paginate.prev_num) }}">上一页</a></li>
@@ -63,7 +63,27 @@
             <li><a class="page_button" href="{{ url_for('general.index', page=paginate.next_num) }}">下一页</a></li>
             {% endif %}
         </ul>
-
+    {% else %}
+        <ul class="pagination">
+            {% if paginate.has_prev %}
+            <li><a class="page_button" href="{{ url_for('general.node_index', node_name=selected_node, page=paginate.prev_num) }}">上一页</a></li>
+            {% endif %}
+            {% for n in paginate.iter_pages()%}
+            {% if n == paginate.page %}
+                <li class="active"><a class="page_num page_selected">{{ n }}</a></li>
+            {% else %}
+                {% if n is none%}
+                <li><span class="page_num">...</span></li>
+                {%else%}
+                <li><a class="page_num" href="{{ url_for('general.node_index', node_name=selected_node, page=n)}}">{{ n }}</a></li>
+                {% endif %}
+            {% endif %}
+            {% endfor %}
+            {% if paginate.has_next %}
+            <li><a class="page_button" href="{{ url_for('general.node_index', node_name=selected_node, page=paginate.next_num) }}">下一页</a></li>
+            {% endif %}
+        </ul>
+    {% endif %}
     {% endif %}
 </div>
 {% endblock %}

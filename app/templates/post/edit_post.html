@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}
+   编辑
+{% endblock %}
+
+{% block script %}
+{{ super() }}
+<script src="/static/js/api/edit_post.js"></script>
+<script src="/static/js/edit_post.js"></script>
+{% endblock %}
+
+{% block css%}
+{{ super() }}
+<link rel="stylesheet" href="/static/css/add_post.css">
+{% endblock %}
+{% block content %}
+
+                    <form class="form-horizontal" role="form" method="POST" action="{{url_for('api.post_update',post_id=post.id)}}">
+                        {{ form.csrf_token }}
+
+                      <div class="form-group col-xs-12 control-group">
+                        <label for="title" class="col-sm-2 control-label">主题</label>
+                        <div class="controls col-sm-10">
+                            {{ form.title(class="form-control",placeholder="",minlength="2",maxlength="20",required="required",value=post.title,
+                            **{'data-validation-regex-regex':'[^\s@#$^&*]*','data-validation-regex-message':'不能含有非法字符','data-validation-required-message':'请输入标题'}) }}
+                            <p class="help-block"></p>
+
+                        </div>
+                      </div>
+                      <div class="form-group col-xs-12 control-group">
+                        <label for="content" class="col-sm-2 control-label">内容</label>
+                        <div class="controls col-sm-10">
+                            {{ form.content(class="form-control",placeholder="",minlength="20",maxlength="1000",required="required",
+                            **{'data-validation-regex-regex':'[^\s@#$^&*]*','data-validation-regex-message':'不能含有非法字符','data-validation-required-message':'请输入内容'}) }}
+                            <p class="help-block"></p>
+
+                        </div>
+                      </div>
+
+                    <div class="form-group col-xs-s" id='cg-{{form.node.id}}'>
+                       {{form.node.label(class='col-xs-2 control-label',for=form.node.id)}}
+                       <div class="col-lg-9">
+                         {{form.node(class='form-control')}}
+                         <span class="help-block" id='hl-{{form.node.id}}'></span>
+                       </div>
+                    </div>
+
+
+                      <div class="form-group col-xs-12">
+                        <div class="col-sm-offset-2 col-sm-10">
+                          <button type="submit" class="btn btn-login btn-lg">保存修改</button>
+                        </div>
+                      </div>
+                        <small><p class="text-center login-required">
+
+                        </p></small>
+
+                        </form>
+
+
+
+{% endblock %}

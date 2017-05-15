@@ -61,20 +61,18 @@ class User(db.Model, ModelMin):
     avatar = db.Column(db.String(200), default='/static/avatar/default_avatar.jpg')
     # role = db.Column(db.SmallInteger, default = ROLE_USER)
     # user_info= db.Column(db.String(140))
+    created_time = db.Column(db.Integer)
     last_seen = db.Column(db.DateTime)
 
     posts = db.relationship('Post', lazy='dynamic',cascade="delete, delete-orphan", backref='user')
     comments = db.relationship('Comment', lazy='dynamic',cascade="delete, delete-orphan", backref='user')
 
     def __init__(self, form):
-        # r = self.register_valid(form)
-        # if r['valid'] == False:
-        #     k,v = r['msg'].popitem()
-        #     raise ValueError('msg{}:{}'.format(k,v) )
         self.username = form.get('register_username', '')
         self.password = form.get('register_password', '')
         self.nickname = form.get('register_nickname', '')
         self.email = form.get('register_email', '')
+        self.created_time = timestamp()
 
     @staticmethod
     def view(username):

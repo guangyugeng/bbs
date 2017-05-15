@@ -7,8 +7,16 @@ from flask_login import login_user, logout_user, current_user, login_required
 from datetime import datetime
 from app.controller import user, post, comment
 from app.models import Node
+from uuid import uuid3, NAMESPACE_DNS
+from PIL import Image
+from utils import save_avatar, remove_avatar
+from flask import current_app
+import time
+from app import uploaded_avatars
+from flask_uploads import UploadNotAllowed
+import os
 
-
+# from app. import uploaded_
 main = Blueprint('api', __name__)
 
 
@@ -132,6 +140,56 @@ def comment_add():
     log(c_json)
     data = comment.add(c_json)
     return jsonify(data)
+
+
+
+@main.route('/upload/avatar', methods=['post'])
+@login_required
+def upload_avatar():
+    u = g.user
+    log('photo' in request.files)
+    if 'photo' in request.files:
+        # form = request.form
+        filename = str(uuid3(NAMESPACE_DNS, str(u.id) + u.username + str(time.time()))).replace('-','')+'.'
+        # log(filename)
+        try:
+            filename = save_avatar(request.files['photo'], filename)
+            url_path = current_app.config['UPLOADED_AVATAR_URL']
+            old_name = u.avatar.split(url_path)[1]
+            remove_avatar(old_name)
+            u.avatar = url_path + filename
+            u.save()
+            # log(filename)
+        except UploadNotAllowed:
+            flash("The upload was not allowed")
+            # log(form['x'])
+            # x = int(form['x'])
+            # y = int(form['y'])
+            # w = int(form['nw'])
+            # h = int(form['nh'])
+            # log(x,y,w,h)
+            # size = (40,40)
+            # img = Image.open(request.files['photo'])
+            # log(img.size, img.show())
+            # img.thumbnail(size)
+            # format = img.format
+            # croped_img = crop_img(img, x, y, w, h)
+            # filename = save_avatar(croped_img, filename, format)
+            # filename = save_avatar(img, filename)
+            # url_path = current_app.config['UPLOADED_PHOTOS_URL']
+            # log(url_path)
+            # old_name = u.avatar.split(url_path)[1]
+            # log(old_name)
+            # remove_avatar(old_name)
+            # u.avatar = url_path + filename
+        #     # u.save()
+        # except Exception as e:
+        #     print(e)
+        #     flash('请上传大小不超过2Mb的图片文件', 'error')
+    return redirect(url_for('user.setting'))
+
+
+
 # @main.route('/api/user/edit', methods=['POST'])
 # @login_required
 # def user_edit():

@@ -26,7 +26,7 @@
                     </p>
                 </div>
                 <div class="check-user-info">
-                    <small> 第 {{view_user.id}} 号会员 加入于 <time class="usr-reg-time">{{view_user.created_time}}</time></small>
+                    <small> 第 {{view_user.id}} 号会员 加入于 <span class="usr-reg-time">{{view_user.created_time}}</span></small>
                 </div>
             </div>
         </div>
@@ -48,7 +48,7 @@
                     <span>&nbsp;•&nbsp;</span>
                     <a class="my-link" href="{{url_for('user.info', username=p.user.username)}}"><strong>{{p.user.username}}</strong></a>
                     <span>&nbsp;•&nbsp;</span>
-                    <time>{{p.created_time}}</time>
+                    <span>{{p.created_time}}</span>
                 </small>
             </div>
         </div>

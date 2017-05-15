@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}
+ {{ post.title }}
+{% endblock %}
+
+{% block css %}
+{{ super() }}
+<link rel="stylesheet" href="/static/css/post.css">
+{% endblock %}
+
+{% block script %}
+{{ super() }}
+<script src="/static/js/api/comment.js"></script>
+<script src="/static/js/comment.js"></script>
+{% endblock %}
+
+{% block content %}
+<div id="top" class="div-post-box">
+    <div class="box-container">
+        <ul class="breadcrumb">
+            <li><a href="{{url_for('general.index')}}">首页</a> </li>
+            <li><a href="/{{post.node.name}}">{{post.node.name}}</a></li>
+            <li class="active">帖子</li>
+        </ul>
+        <div class="post-header inner-box">
+            <div class="author-avatar float-right">
+                <a href="{{url_for('user.info',username=post.user.username)}}">
+                    <img class="img-big" src="{{post.user.avatar}}" alt="{{post.user.name}}" />
+                </a>
+            </div>
+            <a class="my-link" href="/">{{hostname}}</a>
+            <span>&nbsp;>&nbsp;</span>
+            <a class="my-link" href="/{{post.node.name}}">{{post.node.name}}</a>
+            <div class="post-title">
+                <h1>{{post.title}}</h1>
+            </div>
+            <div class="post-info">
+                <h2>
+                    <a class="my-link" href="{{url_for('user.info',username=post.user.username)}}">{{post.user.username}}</a>
+                    <span>&nbsp;•&nbsp;</span>
+                    <span>{{post.created_time}}</span>
+                    <span>发布</span>
+                </h2>
+            </div>
+        </div>
+        <div class="post-body">
+            {{post.content}}
+        </div>
+        <div class="post-footer">
+            {% if post.user_id == user.id %}
+            <form action="{{ url_for('post.delete', post_id=post.id) }}">
+                <input type="hidden" value="{{ csrf_token() }}">
+                <button type="submit">删除</button>
+            </form>
+            <a href="{{ url_for('post.edit', post_id=post.id) }}">编辑</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="box-comment-list">
+        <div class="comment-list-header">
+            <div class="comment-info">
+                    <span class="comment-counts"></span>
+                    <span class="last-comment-time"></span>
+            </div>
+        </div>
+        <div class="comment-list">
+            {% for c in post_comments %}
+            <div class="comment-item inner-box" data-commentid="{{ c.id }}">
+                <div class="comment-body clearfix">
+                    <div class="comment-user-avatar float-left">
+                        <img class="img-middle" src="{{c.user.avatar}}" alt="" />
+                    </div>
+                    <div class="comment-item-right float-left">
+                        <div class="comment-user-name">
+                            <a class="my-link" href="{{url_for('user.info',username=c.user.username)}}">{{c.user.username}}</a>
+                            <span>{{c.created_time}}</span>
+                        </div>
+                        <div class="comment-comment">
+                            <span>{{c.content}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="comment-action clearfix">
+                    <p class="reply-view-message"></p>
+                    <a class="my-link btn-reply-view not-view float-right">展开回复</a>
+                </div>
+                <div class="reply-view"></div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <ul class="pagination">
+            {% if comment_paginate.has_prev %}
+            <li><a class="page_button" href="{{ url_for('post.view', post_id=post.id, page=comment_paginate.prev_num) }}">上一页</a></li>
+            {% endif %}
+            {% for n in comment_paginate.iter_pages()%}
+            {% if n == comment_paginate.page %}
+                <li class="active"><a class="page_num page_selected">{{ n }}</a></li>
+            {% else %}
+                {% if n is none%}
+                <li><span class="page_num">...</span></li>
+                {%else%}
+                <li><a class="page_num" href="{{ url_for('post.view', post_id=post.id, page=n)}}">{{ n }}</a></li>
+                {% endif %}
+            {% endif %}
+            {% endfor %}
+            {% if comment_paginate.has_next %}
+            <li><a class="page_button" href="{{ url_for('post.view', post_id=post.id, page=comment_paginate.next_num) }}">下一页</a></li>
+            {% endif %}
+        </ul>
+
+    </div>
+    <div class="box-comment-input">
+        {% if user is none%}
+            <span>请<a class="btn" href="{{url_for('login.login_view')}}">登录</a>后再评论</span>
+        {% else %}
+        <div class="comment-input-header inner-box clearfix">
+            <a class="float-right" href="#top">↑回到顶部</a>
+            <p>
+                添加一条新评论
+            </p>
+        </div>
+        <div class="comment-input-body inner-box">
+            <textarea class="input-comment" data-postid="{{post.id}}"></textarea>
+            <p class="comment-message message"> <p>
+            <button class="btn btn-new-comment" type="button">评论</button>
+        </div>
+        <div class="comment-input-footer inner-box clearfix">
+            <a class="my-link float-right" href="/">←{{hostname}}</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

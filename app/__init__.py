@@ -6,7 +6,7 @@ from flask_bootstrap import Bootstrap
 # from app.views.frontend import frontend
 from flask_wtf.csrf import CsrfProtect
 from datetime import datetime
-
+from flask_uploads import UploadSet, IMAGES, configure_uploads, ALL
 
 csrf = CsrfProtect()
 
@@ -16,6 +16,10 @@ csrf.init_app(app)
 
 
 app.config.from_object('config')
+
+uploaded_avatars = UploadSet('AVATAR')
+configure_uploads(app, uploaded_avatars)
+
 db = SQLAlchemy(app)
 
 lm = LoginManager()
