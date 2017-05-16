@@ -1,20 +1,24 @@
 {% extends "base.html" %}
 {% block content %}
 <ul class="nav nav-tabs">
-    <li class="{% if selected_node is none%}
+    <li class="{% if selected_topic is none%}
         active
-    {% endif %}"><a class="node-item {% if selected_node is none %}node-selected{% endif %}" href="/">All</a></li>
-    {% for n in node_list %}
-        <li class="{% if selected_node is not none and n.name == selected_node%}
+    {% endif %}"><a class="node-item {% if selected_topic is none %}node-selected{% endif %}" href="/">All</a></li>
+    {% for t in topic_list %}
+        <li class="{% if selected_topic is not none and t.en_name == selected_topic %}
         active
     {% endif %}"><a class="node-item
-    {% if selected_node is not none and n.name == selected_node%}
-        node-selected
+    {% if selected_topic is not none and t.en_name == selected_topic %}
+        topic-selected
     {% endif %}
-        " href="/{{n.name}}">{{n.name}}</a></li>
+        " href="/{{t.en_name}}">{{t.name}}</a></li>
     {% endfor %}
 </ul>
-
+<ul class="nav nav-pills">
+    {% for n in node_list %}
+        <li><a href="/{{n.en_name}}">{{n.name}}</a></li>
+    {% endfor %}
+</ul>
 <div class="div-post-list">
     {% if post_list == [] %}
     <div class="no-post">
@@ -24,7 +28,7 @@
     {% for p in post_list %}
         <div class="post-item inner-box clearfix">
             <div class="post-user-avatar float-left">
-                <img class="img-middle" src="{{p.user.avatar}}" alt="" />
+                <img class="img-middle" src="{{p.user.avatar}}" alt="" height="40" width="40"/>
             </div>
             <div class="post-item-right float-left">
                 <div class="post-title">
@@ -36,14 +40,14 @@
                         <span>&nbsp;•&nbsp;</span>
                         <a class="my-link" href="{{url_for('user.info',username=p.user.username)}}">{{p.user.username}}</a>
                         <span>&nbsp;•&nbsp;</span>
-                        <time>{{p.created_time}}</time>
+                        <span>{{p.created_time}}</span>
                         <span>发布</span>
                     </small>
                 </div>
             </div>
         </div>
     {% endfor %}
-    {% if selected_node is none%}
+    {% if selected_topic is none%}
         <ul class="pagination">
             {% if paginate.has_prev %}
             <li><a class="page_button" href="{{ url_for('general.index', page=paginate.prev_num) }}">上一页</a></li>
@@ -66,7 +70,7 @@
     {% else %}
         <ul class="pagination">
             {% if paginate.has_prev %}
-            <li><a class="page_button" href="{{ url_for('general.node_index', node_name=selected_node, page=paginate.prev_num) }}">上一页</a></li>
+            <li><a class="page_button" href="{{ url_for('general.topic_index', topic_name=selected_topic, page=paginate.prev_num) }}">上一页</a></li>
             {% endif %}
             {% for n in paginate.iter_pages()%}
             {% if n == paginate.page %}
@@ -75,7 +79,7 @@
                 {% if n is none%}
                 <li><span class="page_num">...</span></li>
                 {%else%}
-                <li><a class="page_num" href="{{ url_for('general.node_index', node_name=selected_node, page=n)}}">{{ n }}</a></li>
+                <li><a class="page_num" href="{{ url_for('general.topic_index', topic_name=selected_topic, page=n)}}">{{ n }}</a></li>
                 {% endif %}
             {% endif %}
             {% endfor %}
@@ -86,4 +90,5 @@
     {% endif %}
     {% endif %}
 </div>
+
 {% endblock %}

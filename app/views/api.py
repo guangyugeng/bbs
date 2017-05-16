@@ -162,30 +162,6 @@ def upload_avatar():
             # log(filename)
         except UploadNotAllowed:
             flash("The upload was not allowed")
-            # log(form['x'])
-            # x = int(form['x'])
-            # y = int(form['y'])
-            # w = int(form['nw'])
-            # h = int(form['nh'])
-            # log(x,y,w,h)
-            # size = (40,40)
-            # img = Image.open(request.files['photo'])
-            # log(img.size, img.show())
-            # img.thumbnail(size)
-            # format = img.format
-            # croped_img = crop_img(img, x, y, w, h)
-            # filename = save_avatar(croped_img, filename, format)
-            # filename = save_avatar(img, filename)
-            # url_path = current_app.config['UPLOADED_PHOTOS_URL']
-            # log(url_path)
-            # old_name = u.avatar.split(url_path)[1]
-            # log(old_name)
-            # remove_avatar(old_name)
-            # u.avatar = url_path + filename
-        #     # u.save()
-        # except Exception as e:
-        #     print(e)
-        #     flash('请上传大小不超过2Mb的图片文件', 'error')
     return redirect(url_for('user.setting'))
 
 

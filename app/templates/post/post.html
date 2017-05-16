@@ -26,12 +26,9 @@
         <div class="post-header inner-box">
             <div class="author-avatar float-right">
                 <a href="{{url_for('user.info',username=post.user.username)}}">
-                    <img class="img-big" src="{{post.user.avatar}}" alt="{{post.user.name}}" />
+                    <img class="img-big" src="{{post.user.avatar}}" alt="{{post.user.name}}" height="40" width="40"/>
                 </a>
             </div>
-            <a class="my-link" href="/">{{hostname}}</a>
-            <span>&nbsp;>&nbsp;</span>
-            <a class="my-link" href="/{{post.node.name}}">{{post.node.name}}</a>
             <div class="post-title">
                 <h1>{{post.title}}</h1>
             </div>
@@ -69,7 +66,7 @@
             <div class="comment-item inner-box" data-commentid="{{ c.id }}">
                 <div class="comment-body clearfix">
                     <div class="comment-user-avatar float-left">
-                        <img class="img-middle" src="{{c.user.avatar}}" alt="" />
+                        <img class="img-middle" src="{{c.user.avatar}}" alt="" height="40" width="40"/>
                     </div>
                     <div class="comment-item-right float-left">
                         <div class="comment-user-name">

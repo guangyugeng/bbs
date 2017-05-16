@@ -1,15 +1,11 @@
 from flask import url_for, g, abort, request, current_app
 from app.models import Post
-from app.models import Node
+from app.models import Node, Topic
 # from services.NotifyService import notify_service, TARGET_TYPE, REASON_TYPE
 from utils import log
 
+
 def add(form):
-    # result = dict(
-    #     # valid=True,
-    #     # message=dict(),
-    #     data=dict()
-    # )
     log(g.user.id)
     form = form.to_dict()
     form['user_id'] = int(g.user.id)
@@ -21,10 +17,10 @@ def add(form):
     log(p.id,url_for('post.view', post_id=p.id))
     # subscribe_post(p)
     url = url_for('post.view', post_id=p.id)
-
     return url
 
-def page(p, node_name=None):
+
+def node_page(p, node_name=None):
     if not p.isdigit():
         p = '1'
     page = int(p)
@@ -38,7 +34,6 @@ def page(p, node_name=None):
         query = node.posts
     paginate = query.order_by(Post.created_time.desc()).paginate(page, pre_page, False)
     post_list = paginate.items
-    # log(post_list, paginate)
     node_list = Node.query.all()
     data = {
         'post_list': post_list,
@@ -47,6 +42,36 @@ def page(p, node_name=None):
         'selected_node': node_name,
     }
     return data
+
+
+def topic_page(p, topic_name=None):
+    if not p.isdigit():
+        p = '1'
+    page = int(p)
+    pre_page = 2
+    if topic_name is None:
+        query = Post.query
+        node_list = Node.query.all()
+        log(query)
+    else:
+        topic = Topic.query.filter_by(en_name=topic_name).first()
+        log(topic)
+        if topic is None:
+            abort(404)
+        query = topic.posts
+        node_list = topic.nodes.all()
+    paginate = query.order_by(Post.created_time.desc()).paginate(page, pre_page, False)
+    post_list = paginate.items
+    topic_list = Topic.query.all()
+    data = {
+        'post_list': post_list,
+        'paginate': paginate,
+        'topic_list': topic_list,
+        'node_list': node_list,
+        'selected_topic': topic_name,
+    }
+    return data
+
 
 def view(post_id, comment_page):
     p = Post.query.get(post_id)
@@ -78,6 +103,7 @@ def edit(post_id):
         post=p,
     )
     return data
+
 
 def update(post_id, form):
     p = Post.query.filter_by(id=post_id).first()

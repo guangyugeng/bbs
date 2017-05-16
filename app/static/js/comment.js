@@ -6,7 +6,7 @@ var commentTemplate = function(d){
     var t = `
     <div class="comment-item inner-box clearfix">
         <div class="comment-user-avatar float-left">
-            <img class="img-middle" src="${u.avatar}" alt="" />
+            <img class="img-middle" src="${u.avatar}" alt="" height="40" width="40"/>
         </div>
         <div class="comment-item-right float-left">
             <div class="comment-user-name">

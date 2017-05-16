@@ -25,7 +25,7 @@ main = Blueprint('general', __name__)
 def index():
     # print(g.user,'sdsds')
     page = request.args.get('page', '1')
-    data = post.page(page)
+    data = post.topic_page(page)
     u = g.user
     if u.is_authenticated:
         return render_template('general/index.html',
@@ -35,13 +35,29 @@ def index():
         return render_template('general/index.html',
                                **data)
 
-@main.route('/<string:node_name>')
+@main.route('/go/<string:node_name>')
 def node_index(node_name):
     page = request.args.get('page', '1')
-    data = post.page(page,node_name)
+    data = post.node_page(page,node_name)
     print(data['selected_node'])
     for n in data['node_list']:
         print(n.name==data['selected_node'])
+    u = g.user
+    if u.is_authenticated:
+        return render_template('general/node.html',
+                               user = u,
+                               **data)
+    else:
+        return render_template('general/node.html',
+                               **data)
+
+@main.route('/<string:topic_name>')
+def topic_index(topic_name):
+    page = request.args.get('page', '1')
+    data = post.topic_page(page, topic_name)
+    print(data['selected_topic'])
+    for n in data['topic_list']:
+        print(n.name==data['selected_topic'])
     u = g.user
     if u.is_authenticated:
         return render_template('general/index.html',

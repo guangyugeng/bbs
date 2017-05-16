@@ -21,11 +21,13 @@ var btnOnNewNode = function(e){
     var btn = e.target
     var box = $(btn).closest('.node-input-box')
     var topic_id = $(box).find('.select-topic').first().val()
-    var name = $(box).find('.input-node-content').first().val()
+    var name = $(box).find('.input-node-name').first().val()
+    var en_name = $(box).find('.input-node-en_name').first().val()
     var description = $(box).find('.input-node-description').first().val()
     var form = {
         'topic_id': parseInt(topic_id),
         'name': name,
+        'en_name': en_name,
         'description': description
     }
     log(form.topic_id)

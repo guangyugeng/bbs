@@ -138,21 +138,29 @@ class Comment(db.Model, ModelMin):
 class Topic(db.Model, ModelMin):
     __tablename__ = 'topic'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(30))
-    nodes = db.relationship('Node', backref='topic')
-    posts = db.relationship('Post', backref='topic')
+    name = db.Column(db.String(30), unique=True)
+    en_name = db.Column(db.String(30), unique=True)
+    nodes = db.relationship('Node', backref='topic', lazy='dynamic',cascade="delete, delete-orphan")
+    posts = db.relationship('Post', backref='topic', lazy='dynamic',cascade="delete, delete-orphan")
 
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, form):
+        self.name = form.get('name')
+        self.en_name = form.get('en_name')
 
     @classmethod
     def user_list(cls):
         # data = {}
         topic_list = Topic.query.filter_by().all()
-        first_list = ['技术','创意','好玩','Apple','酷工作','交易','城市']
+        first_list = [{'name':'技术','en_name':'technology'},
+                      {'name':'创意','en_name':'creative'},
+                      {'name':'好玩','en_name':'play'},
+                      {'name':'Apple','en_name':'apple'},
+                      {'name':'酷工作','en_name':'jobs'},
+                      {'name':'交易','en_name':'deals'},
+                      {'name':'城市','en_name':'city'}]
         if topic_list == []:
-            for name in first_list:
-                t = Topic(name)
+            for f in first_list:
+                t = Topic(f)
                 t.save()
             topic_list = Topic.query.filter_by().all()
 
@@ -201,6 +209,7 @@ class Node(db.Model, ModelMin):
     __tablename__ = 'node'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), unique=True)
+    en_name = db.Column(db.String(30), unique=True)
     description = db.Column(db.String(100))
     posts = db.relationship('Post', lazy='dynamic',cascade="delete, delete-orphan", backref='node')
     hidden = db.Column(db.Boolean, default=False)
@@ -208,6 +217,7 @@ class Node(db.Model, ModelMin):
 
     def __init__(self, form):
         self.name = form.get('name')
+        self.en_name = form.get('en_name')
         self.description = form.get('description', '')
         self.topic_id = form.get('topic_id')
 
@@ -215,7 +225,8 @@ class Node(db.Model, ModelMin):
     # def new(cls, form):
     #     node = cls(form)
     #     node.save()
-    #
+
+
     @classmethod
     def user_list(cls):
         # data = {}
