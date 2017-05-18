@@ -3,15 +3,15 @@ import os
 import unittest
 
 from config import basedir
-from app import app, db
-from app.models import User, Topic, Node, Comment, Post
+from f import app, db
+from models import User, Topic, Node, Comment, Post
+
+
 # from app.models.Topic import Topic
 # from app.models.Node import Node
 # from app.models.Post import Post
 # from app.models.Comment import Comment
-from datetime import datetime, timedelta
-from app.controller.user import register, login
-from utils import log
+from controller import register, login
 
 
 class TestModel(unittest.TestCase):

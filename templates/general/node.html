@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block content %}
+<ul class="breadcrumb">
+            <li><a href="{{url_for('general.index')}}">首页</a> </li>
+            <li><a href="/{{selected_node.en_name}}">{{selected_node.name}}</a></li>
+</ul>
+<span>{{selected_node.description}}</span>
+<div class="div-post-list">
+    <div class="no-post">
+        <a class="btn-new-post" href="/post/new">创建一个新主题>></a>
+    </div>
+    {% for p in post_list %}
+        <div class="post-item inner-box clearfix">
+            <div class="post-user-avatar float-left">
+                <img class="img-middle" src="{{p.user.avatar}}" alt="" height="40" width="40"/>
+            </div>
+            <div class="post-item-right float-left">
+                <div class="post-title">
+                    <a class="my-link" href="{{url_for('post.view', post_id=p.id)}}">{{p.title}}</a>
+                </div>
+                <div class="post-info">
+                    <small>
+                        <a class="link-node" href="/{{p.node.name}}">{{p.node.name}}</a>
+                        <span>&nbsp;•&nbsp;</span>
+                        <a class="my-link" href="{{url_for('user.info',username=p.user.username)}}">{{p.user.username}}</a>
+                        <span>&nbsp;•&nbsp;</span>
+                        <time>{{p.created_time}}</time>
+                        <span>发布</span>
+                    </small>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    {% if selected_node is none%}
+        <ul class="pagination">
+            {% if paginate.has_prev %}
+            <li><a class="page_button" href="{{ url_for('general.index', page=paginate.prev_num) }}">上一页</a></li>
+            {% endif %}
+            {% for n in paginate.iter_pages()%}
+            {% if n == paginate.page %}
+                <li class="active"><a class="page_num page_selected">{{ n }}</a></li>
+            {% else %}
+                {% if n is none%}
+                <li><span class="page_num">...</span></li>
+                {%else%}
+                <li><a class="page_num" href="{{ url_for('general.index', page=n)}}">{{ n }}</a></li>
+                {% endif %}
+            {% endif %}
+            {% endfor %}
+            {% if paginate.has_next %}
+            <li><a class="page_button" href="{{ url_for('general.index', page=paginate.next_num) }}">下一页</a></li>
+            {% endif %}
+        </ul>
+    {% else %}
+        <ul class="pagination">
+            {% if paginate.has_prev %}
+            <li><a class="page_button" href="{{ url_for('general.node_index', node_name=selected_node, page=paginate.prev_num) }}">上一页</a></li>
+            {% endif %}
+            {% for n in paginate.iter_pages()%}
+            {% if n == paginate.page %}
+                <li class="active"><a class="page_num page_selected">{{ n }}</a></li>
+            {% else %}
+                {% if n is none%}
+                <li><span class="page_num">...</span></li>
+                {%else%}
+                <li><a class="page_num" href="{{ url_for('general.node_index', node_name=selected_node, page=n)}}">{{ n }}</a></li>
+                {% endif %}
+            {% endif %}
+            {% endfor %}
+            {% if paginate.has_next %}
+            <li><a class="page_button" href="{{ url_for('general.node_index', node_name=selected_node, page=paginate.next_num) }}">下一页</a></li>
+            {% endif %}
+        </ul>
+    {% endif %}
+</div>
+{% endblock %}
