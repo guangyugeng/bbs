@@ -63,13 +63,13 @@ var btnOnDeleteNode = function(e){
     api.nodeDelete(form, response)
 }
 
-var bindEvents = function(){
+var bindNodeEvents = function(){
     $('.node-new').on('click', btnOnNewNode)
     $('.node-lists').on('click', '.node-delete', btnOnDeleteNode)
 }
 
-var __main = function(){
-    bindEvents()
-}
 
-$(document).ready(__main);
+$(document).ready(function(){
+    bindNodeEvents()
+
+})

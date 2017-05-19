@@ -162,7 +162,7 @@ var btnOnReplySomeOne = function(e){
 
 }
 
-var bindEvents = function(){
+var bindCommentEvents = function(){
     $('.btn-new-comment').on('click', btnOnNewComment)
     $('.comment-list').on('click', '.btn-reply-view.not-view', btnOnViewReplies)
     $('.comment-list').on('click', '.reply-page', btnOnViewReplies)
@@ -170,8 +170,8 @@ var bindEvents = function(){
     $('.reply-view').on('click', '.reply-this', btnOnReplySomeOne)
 }
 
-var __main = function(){
-    bindEvents()
-}
 
-$(document).ready(__main)
+$(document).ready(function(){
+    bindCommentEvents()
+
+})
