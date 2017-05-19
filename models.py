@@ -1,9 +1,4 @@
 from datetime import datetime
-
-# from .Base import ModelMin, timestamp
-from hashlib import md5
-import time
-from functools import wraps
 from utils.utils import log
 from flask_sqlalchemy import SQLAlchemy
 from flask import url_for
@@ -45,9 +40,7 @@ class ModelMin(object):
 
 
 def timestamp():
-    log(datetime.now())
-    t = datetime.now()
-    return t
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
 class User(db.Model, ModelMin):
@@ -110,8 +103,8 @@ class User(db.Model, ModelMin):
 class Comment(db.Model, ModelMin):
     __tablename__ = 'comment'
     id = db.Column(db.Integer, primary_key=True)
-    created_time = db.Column(db.Integer)
-    edited_time = db.Column(db.Integer)
+    created_time = db.Column(db.DateTime)
+    edited_time = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
     content = db.Column(db.String(200))
     hidden = db.Column(db.Boolean, default=False)
@@ -120,10 +113,8 @@ class Comment(db.Model, ModelMin):
 
     def __init__(self, form):
         self.created_time = timestamp()
-        log('time',self.created_time)
         self.edited_time = timestamp()
         self.user_id = form.get('user_id')
-        log('user',self.user_id)
         self.content = form.get('content')
         self.post_id = form.get('post_id')
 
@@ -172,8 +163,8 @@ class Topic(db.Model, ModelMin):
 class Post(db.Model, ModelMin):
     __tablename__ = 'post'
     id = db.Column(db.Integer, primary_key=True)
-    created_time = db.Column(db.Integer)
-    edited_time = db.Column(db.Integer)
+    created_time = db.Column(db.DateTime)
+    edited_time = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
     title = db.Column(db.String(30))
     content = db.Column(db.String(1000))
@@ -227,11 +218,7 @@ class Node(db.Model, ModelMin):
 
     @classmethod
     def user_list(cls):
-        # data = {}
-        log("start")
         node_list = Node.query.filter_by(hidden=False).all()
-        log(node_list)
-        # data['node_list'] = node_list
         return node_list
 
     def json(self):

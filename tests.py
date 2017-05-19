@@ -3,7 +3,7 @@ import os
 import unittest
 
 from config import basedir
-from f import app, db
+from app import app, db
 from models import User, Topic, Node, Comment, Post
 
 

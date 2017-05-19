@@ -20,7 +20,7 @@
     <div class="box-container">
         <ul class="breadcrumb">
             <li><a href="{{url_for('general.index')}}">首页</a> </li>
-            <li><a href="/go    /{{post.node.en_name}}">{{post.node.name}}</a></li>
+            <li><a href="/go/{{post.node.en_name}}">{{post.node.name}}</a></li>
             <li class="active">帖子</li>
         </ul>
         <div class="post-header inner-box">
@@ -77,10 +77,6 @@
                             <span>{{c.content}}</span>
                         </div>
                     </div>
-                </div>
-                <div class="comment-action clearfix">
-                    <p class="reply-view-message"></p>
-                    <a class="my-link btn-reply-view not-view float-right">展开回复</a>
                 </div>
                 <div class="reply-view"></div>
             </div>

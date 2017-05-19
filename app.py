@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from flask import Flask, g, render_template
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
@@ -12,21 +10,25 @@ from views.post import main as routes_post
 from views.user import main as routes_user
 from utils.plugin import *
 
+
 app = Flask(__name__)
 manager = Manager(app)
 lm = LoginManager()
-hostname = 'kaede'
+hostname = 'idle'
+
 
 @app.before_request
 def before_request():
     g.user = current_user
     if g.user.is_authenticated:
-        g.user.last_seen = datetime.now()
+        g.user.last_seen = timestamp()
         g.user.save()
+
 
 @lm.user_loader
 def load_user(id):
     return User.query.get(int(id))
+
 
 @app.context_processor
 def create_base_data():
@@ -38,12 +40,14 @@ def create_base_data():
     }
     return data
 
+
 def register_routes(app):
     app.register_blueprint(routes_general)
     app.register_blueprint(routes_post, url_prefix='/post')
     app.register_blueprint(routes_admin, url_prefix='/admin')
     app.register_blueprint(routes_api, url_prefix='/api')
     app.register_blueprint(routes_user, url_prefix='/user')
+
 
 def configure_app():
     app.config.from_object('config')
@@ -79,14 +83,17 @@ def configure_manager():
     Migrate(app, db)
     manager.add_command('db', MigrateCommand)
 
+# 错误处理
 @app.errorhandler(404)
 def internal_error(error):
     return render_template('base/404.html'), 404
+
 
 @app.errorhandler(500)
 def internal_error(error):
     db.session.rollback()
     return render_template('base/500.html'), 500
+
 
 if __name__ == '__main__':
     configure_manager()

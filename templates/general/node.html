@@ -2,7 +2,7 @@
 {% block content %}
 <ul class="breadcrumb">
             <li><a href="{{url_for('general.index')}}">首页</a> </li>
-            <li><a href="/{{selected_node.en_name}}">{{selected_node.name}}</a></li>
+            <li>{{selected_node.name}}</li>
 </ul>
 <span>{{selected_node.description}}</span>
 <div class="div-post-list">
@@ -20,11 +20,11 @@
                 </div>
                 <div class="post-info">
                     <small>
-                        <a class="link-node" href="/{{p.node.name}}">{{p.node.name}}</a>
+                        <a class="link-node" href="/go/{{p.node.name}}">{{p.node.name}}</a>
                         <span>&nbsp;•&nbsp;</span>
                         <a class="my-link" href="{{url_for('user.info',username=p.user.username)}}">{{p.user.username}}</a>
                         <span>&nbsp;•&nbsp;</span>
-                        <time>{{p.created_time}}</time>
+                        <span>{{p.created_time}}</span>
                         <span>发布</span>
                     </small>
                 </div>

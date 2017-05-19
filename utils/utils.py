@@ -16,42 +16,12 @@ def log(*args, **kwargs):
     #     # 需要注意的是 **kwargs 必须是最后一个参数
     #     print(dt, *args, file=f, **kwargs)
 
-# def crop_img(img, x, y, w, h):
-#     img_size = (160, 160)
-#     if hasattr(img, 'is_animated') and img.is_animated:
-#         frames = [f.copy() for f in ImageSequence.Iterator(img)]
-#         r = []
-#         for f in frames:
-#             sub_img = f.crop((x, y, x + w, y + h))
-#             sub_img.thumbnail(img_size)
-#             r.append(sub_img)
-#         return r
-#     else:
-#         sub_img = img.crop((x, y, x + w, y + h))
-#         sub_img.thumbnail(img_size)
-#         return sub_img
-
-# def save_avatar(img, filename, format):
-#     path = current_app.config['UPLOADED_PHOTOS_DEST']
-#     p = os.path.join(path, filename)
-#     save_all = False
-#     append_image = []
-#     if type(img) == list:
-#         save_all = True
-#         append_image = img[1:]
-#         img = img[0]
-#
-#     img.save(p + '.' + format.lower(), save_all=save_all, append_images=append_image)
-#
-#     return filename + '.' + format.lower()
 
 def save_avatar(img, filename):
-    filename = uploaded_avatars.save(img, name=filename)
-
     path = current_app.config['UPLOADED_AVATAR_DEST']
     log(path)
-    # filename = filename + '.' + img.format.lower()
-    # p = os.path.join(path, filename)
+    filename = uploaded_avatars.save(img, name=filename)
+
     return filename
 
 
@@ -59,7 +29,6 @@ def remove_avatar(filename):
     try:
         if filename != 'default_avatar.jpg':
             path = current_app.config['UPLOADED_AVATAR_DEST']
-            log(path)
             p = os.path.join(path, filename)
             os.remove(p)
     except Exception as e:
